@@ -4,7 +4,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { color-scheme: light; scroll-behavior: smooth; }
 body {
-  margin: 0; min-width: 320px;
+  margin: 0; min-width: 320px; min-height: 100vh; display: flex; flex-direction: column;
   background: var(--color-surface); color: var(--color-text);
   font-family: var(--font-ui); font-size: 16px; line-height: 1.55;
   -webkit-font-smoothing: antialiased;
@@ -177,7 +177,7 @@ img { max-width: 100%; }
 @media (min-width: 768px) { .moon-band { height: 131px; } .moon-band::after { background-size: 131px 100%; } }
 
 /* ---------- footer */
-footer.site { background: var(--color-dark-bg); color: var(--color-on-dark-muted); font-size: 14px; padding: 28px 0; }
+footer.site { background: var(--color-dark-bg); color: var(--color-on-dark-muted); font-size: 14px; padding: 28px 0; margin-top: auto; }
 footer.site .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
 footer.site a { color: var(--color-on-dark); }
 footer.site p { margin: 0; }

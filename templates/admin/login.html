@@ -3,7 +3,6 @@
 {% block content %}
 <div class="card login-card">
   <h1>Log in</h1>
-  <p class="lead">For the organizing team and shift hosts. Use the login for your shift, for example tue3-shift1.</p>
   {% if error %}<ul class="errors"><li>{{ error }}</li></ul>{% endif %}
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
