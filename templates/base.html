@@ -19,7 +19,6 @@
     <nav aria-label="Main">{% block nav %}
       <a href="{{ url_for('index') }}#agenda">Agenda</a>
       <a href="{{ url_for('index') }}#organizers">Organizers</a>
-      {% if user %}<a href="{{ url_for('admin_shifts') }}">Admin</a>{% endif %}
     {% endblock %}</nav>
   </div>
 </header>
