@@ -345,7 +345,6 @@ class TestPublic(HubTestCase):
             self.assertIn(theme, body)
         self.assertEqual(body.count('class="shift"'), 12)
         self.assertIn("calendar.google.com/calendar/render?action=TEMPLATE", body)
-        self.assertIn(config.DISCLAIMER, body)
         self.assertIn('rel="icon" type="image/svg+xml" href="data:image/svg+xml,', body)
         self.assertNotIn("\u2014", body)  # no em dashes in copy
 

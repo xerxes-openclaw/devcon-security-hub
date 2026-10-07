@@ -35,7 +35,8 @@ img { max-width: 100%; }
 }
 .topbar nav a:hover, .topbar nav button:hover, .topbar nav a[aria-current="page"] { color: var(--color-text); background: var(--color-surface-sunk); }
 
-.home .topbar { position: absolute; inset: 0 0 auto; z-index: 2; background: linear-gradient(180deg, var(--color-scrim), transparent); border: 0; }
+.home .topbar { position: absolute; inset: 0 0 auto; z-index: 2; background: rgb(22 11 43 / 72%); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 0; border-bottom: 1px solid var(--color-on-dark-border); }
+.home .topbar a { text-shadow: 0 1px 2px rgb(22 11 43 / 60%); }
 .home .topbar .wrap { min-height: 72px; max-width: 1312px; }
 .home .brand, .home .brand:hover { color: var(--color-on-dark); }
 .home .topbar nav a { color: var(--color-on-dark); font-weight: 600; font-size: 15px; }
