@@ -72,7 +72,7 @@
               <h5 class="s-title">{{ x.title }}</h5>
               <p class="s-meta"><span class="s-type">{{ x.type }}</span>{% if x.speakers %}<span>{{ x.speakers }}</span>{% endif %}{% if x.is_demo %}<span class="s-demo">Demo</span>{% endif %}</p>
               {% if x.description %}<p class="s-desc">{{ x.description }}</p>{% endif %}
-              <p class="cal"><a href="{{ gcal_link(x) }}" target="_blank" rel="noopener">Google Calendar</a><a href="{{ url_for('session_ics', xid=x.id) }}">.ics</a></p>
+              <p class="cal"><a href="{{ gcal_link(x) }}" target="_blank" rel="noopener">Add to Google Calendar</a></p>
             </div>
           </li>
           {% endfor %}
