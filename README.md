@@ -12,9 +12,16 @@ Community-run hub. Not an official Devcon or Ethereum Foundation page.
 - **Public agenda**: four day tabs, three host shifts per day, sessions inside
   each shift. Every session has an "Add to Google Calendar" link and a
   `.ics` download; `/agenda.ics` is the full feed. Times are IST.
-- **Admin** (`/admin`, email + password): global admins manage users, assign
-  hosts to shifts, move shift times and edit any session. Hosts add and edit
-  sessions only inside their own shifts.
+- **Admin** (`/admin`, username + password; shared logins, no personal
+  accounts, no email):
+  - `team`: the organizers' shared login. Edits everything: shift times,
+    host names, every session, matchmaking, and resets shift-login
+    passwords on the Shift logins page (the new password is shown once).
+  - 12 shift logins, one per host shift: `tue3-shift1` ... `fri6-shift3`
+    (shift 1/2/3 = 09-12, 12-15, 15-18 IST). Each can add, edit and delete
+    sessions only inside its own shift and set that shift's host name.
+- **Host names**: free text per shift, shown publicly as "Host: <name>", or
+  "Host: to be announced" while empty.
 - **Validation**: sessions must fit inside their shift; overlaps anywhere on
   the same day are blocked; gaps under 5 minutes warn and need an explicit
   "save anyway" tick.
@@ -30,18 +37,30 @@ Community-run hub. Not an official Devcon or Ethereum Foundation page.
 Then open http://127.0.0.1:4590 (change with `PORT` in `.env`).
 
 First run creates `.env` with a `SECRET_KEY` and `hub.db` with the default
-3 shifts per day. Create the global admins from the command line (emails are
-never hardcoded):
+3 shifts per day. Create the logins from the command line:
 
-    flask --app app create-user --role admin      # prompts for email, name, password
-    flask --app app create-user --role host
-    flask --app app set-password --email someone@example.org
-    flask --app app seed-demo                     # demo hosts + 12 demo sessions
-    flask --app app seed-demo --reset             # replace the demo data
+    flask --app app init-logins             # team + 12 shift logins
+    flask --app app reset-login tue3-shift1 # new password for one login
+    flask --app app seed-demo               # demo host names + 12 demo sessions
+    flask --app app seed-demo --reset       # replace the demo data
 
-Demo users, sessions and matchmaking entries carry an `is_demo` flag and a
-visible Demo badge; the public page shows a banner while any demo session
-exists. `seed-demo --reset` removes them.
+`init-logins` is idempotent: it creates any missing login (and any missing
+default shift), prints each NEW username with a random password once on
+stdout, and leaves existing logins alone. Passwords are stored only as
+hashes; nothing is hardcoded. A password reset logs out every browser still
+using the old password.
+
+Demo sessions and matchmaking entries carry an `is_demo` flag and a visible
+Demo badge; the public page shows a banner while any demo session exists.
+`seed-demo` fills empty host names with "Demo Host A/B/C";
+`seed-demo --reset` removes the demo rows and those demo names.
+
+**Upgrading an older `hub.db`** (personal accounts with email): the app
+migrates it on start. It first copies the file to
+`hub-pre-logins-<unixtime>.db`, keeps every shift, session and matchmaking
+entry, copies each shift's old host name into the new host name field and
+drops the old accounts. Then run `init-logins`. For a demo-only database
+you can instead delete `hub.db` and run `init-logins` and `seed-demo`.
 
 ## Where to change things
 
@@ -60,7 +79,9 @@ exists. `seed-demo --reset` removes them.
 
     .venv/bin/python -m unittest discover tests -v      # Windows: .venv\Scripts\python
 
-Covers auth gating, CSRF, host-vs-admin permissions, overlap blocking, the
+Covers auth gating, CSRF, username login, team-vs-shift-login permissions
+(sessions and host names), password reset shown once, the login CLI, the
+old-schema migration, overlap blocking, the
 5-minute gap warning and override, shift moves, matchmaking placement, ICS
 validity (CRLF, 75-octet folding, required properties, UTC times) and the
 public agenda render.

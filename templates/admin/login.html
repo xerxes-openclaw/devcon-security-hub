@@ -3,11 +3,11 @@
 {% block content %}
 <div class="card login-card">
   <h1>Log in</h1>
-  <p class="lead">For hub admins and hosts.</p>
+  <p class="lead">For the organizing team and shift hosts. Use the login for your shift, for example tue3-shift1.</p>
   {% if error %}<ul class="errors"><li>{{ error }}</li></ul>{% endif %}
   <form method="post">
     <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
-    <div class="field"><label for="email">Email</label><input id="email" type="email" name="email" autocomplete="username" required></div>
+    <div class="field"><label for="username">Username</label><input id="username" type="text" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="64" required></div>
     <div class="field"><label for="password">Password</label><input id="password" type="password" name="password" autocomplete="current-password" required></div>
     <button class="btn btn-primary full" type="submit">Log in</button>
   </form>

@@ -277,3 +277,7 @@ table.list th { font-size: 12px; text-transform: uppercase; letter-spacing: .05e
 .inline-form { display: inline; margin: 0; }
 .small-note { margin: 0; font-size: 13px; }
 .placed { margin: 4px 0; }
+.reveal { border: 2px solid var(--color-border); }
+.secret code { font-size: 18px; user-select: all; word-break: break-all; }
+@media (min-width: 760px) { .shift-edit.shift-edit-host { grid-template-columns: 1fr auto; } }
+.admin .shift.shift-mine { border: 2px solid var(--color-primary, var(--color-border)); }

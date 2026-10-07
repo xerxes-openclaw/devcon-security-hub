@@ -5,7 +5,7 @@
   {% if user %}
   <a href="{{ url_for('admin_shifts') }}" {% if request.endpoint == 'admin_shifts' %}aria-current="page"{% endif %}>Shifts</a>
   <a href="{{ url_for('admin_match') }}" {% if request.endpoint == 'admin_match' %}aria-current="page"{% endif %}>Matchmaking</a>
-  {% if user.role == 'admin' %}<a href="{{ url_for('admin_users') }}" {% if request.endpoint == 'admin_users' %}aria-current="page"{% endif %}>Users</a>{% endif %}
+  {% if user.role == 'team' %}<a href="{{ url_for('admin_logins') }}" {% if request.endpoint == 'admin_logins' %}aria-current="page"{% endif %}>Shift logins</a>{% endif %}
   <a href="{{ url_for('index') }}">Public site</a>
   <form method="post" action="{{ url_for('logout') }}" class="inline-form"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button type="submit">Log out</button></form>
   {% else %}

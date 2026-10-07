@@ -2,11 +2,13 @@
 
 Public: hero, four-day agenda (host shifts with sessions inside), add-to-
 calendar links per session, a full .ics feed.
-Admin (email + password): global admins manage users and shifts and can edit
-everything; hosts manage sessions inside their own shifts only. A
+Admin (username + password, shared logins, no personal accounts): the one
+"team" login edits everything; each of the 12 shift logins (tue3-shift1 ...
+fri6-shift3) manages sessions and the host name of its own shift only. A
 matchmaking board lists open time and content waiting for a slot.
 """
 import datetime as dt
+import hashlib
 import hmac
 import secrets
 import threading
@@ -284,8 +286,12 @@ def load_user_and_check_csrf():
     uid = session.get("uid")
     if uid:
         g.user = db.user_by_id(uid)
-        if g.user is None:
+        # A password reset changes the hash, which logs out every browser
+        # still holding the old shared password.
+        if g.user is None or session.get("pwv") != password_version(g.user):
+            g.user = None
             session.pop("uid", None)
+            session.pop("pwv", None)
     if request.method == "POST":
         tok = request.form.get("_csrf", "")
         if not (tok and hmac.compare_digest(tok, session.get("_csrf", "-"))):
@@ -311,7 +317,8 @@ def security_headers(resp):
 @app.context_processor
 def inject():
     return {"csrf_token": csrf_token, "cfg": config, "user": g.get("user"),
-            "favicon": FAVICON_URI, "logo_svg": LOGO_SVG}
+            "favicon": FAVICON_URI, "logo_svg": LOGO_SVG,
+            "shift_label": shift_label}
 
 
 def login_required(fn):
@@ -324,23 +331,47 @@ def login_required(fn):
 
 
 def admin_required(fn):
+    """Team login only."""
     @wraps(fn)
     @login_required
     def wrapper(*a, **kw):
-        if g.user["role"] != "admin":
+        if g.user["role"] != "team":
             abort(403)
         return fn(*a, **kw)
     return wrapper
 
 
 def is_admin():
-    return g.user is not None and g.user["role"] == "admin"
+    return g.user is not None and g.user["role"] == "team"
 
 
 def can_manage_shift(shift):
-    """Admins manage every shift; a host only the shifts assigned to them."""
+    """The team login manages every shift; a shift login only its own."""
     return shift is not None and g.user is not None and (
-        g.user["role"] == "admin" or shift["host_id"] == g.user["id"])
+        g.user["role"] == "team" or shift["id"] == g.user["shift_id"])
+
+
+def password_version(u):
+    return hashlib.sha256(u["password_hash"].encode()).hexdigest()[:16]
+
+
+def new_password():
+    """Strong random password for a shared login (about 120 bits)."""
+    return secrets.token_urlsafe(15)
+
+
+def shift_label(day, start_min=None, end_min=None):
+    d = day_date(day)
+    text = "%s %d %s" % (d.strftime("%a"), d.day, d.strftime("%b"))
+    if start_min is not None:
+        text += ", %s to %s" % (hhmm(start_min), hhmm(end_min))
+    return text
+
+
+def shift_username(day, index):
+    """Day 1, index 0 -> 'tue3-shift1'."""
+    d = day_date(day)
+    return "%s%d-shift%d" % (d.strftime("%a").lower(), d.day, index + 1)
 
 
 def manageable_shifts():
@@ -413,19 +444,20 @@ def login():
         if not rate_limit("login:" + ip, config.LOGIN_ATTEMPTS_PER_MINUTE_PER_IP, 60):
             error = "Too many attempts. Wait a minute and try again."
         else:
-            u = db.user_by_email(request.form.get("email", ""))
+            u = db.user_by_username(request.form.get("username", "")[:64])
             if u and check_password_hash(u["password_hash"],
                                          request.form.get("password", "")):
                 csrf = session.get("_csrf")
                 session.clear()
                 session["uid"] = u["id"]
+                session["pwv"] = password_version(u)
                 if csrf:
                     session["_csrf"] = csrf
                 nxt = request.args.get("next", "")
                 if not (nxt.startswith("/admin") and "//" not in nxt):
                     nxt = url_for("admin_shifts")
                 return redirect(nxt)
-            error = "That email and password do not match."
+            error = "That username and password do not match."
     return render_template("admin/login.html", error=error)
 
 
@@ -447,9 +479,13 @@ def admin_home():
 @login_required
 def admin_shifts():
     days = agenda_days()
-    hosts = [u for u in db.users()]
-    return render_template("admin/shifts.html", days=days, hosts=hosts,
+    own = db.shift(g.user["shift_id"]) if g.user["shift_id"] else None
+    return render_template("admin/shifts.html", days=days, own=own,
                            can_manage_shift=can_manage_shift)
+
+
+def host_name_field():
+    return request.form.get("host_name", "").strip()[:120]
 
 
 @app.route("/admin/shifts/<int:sid>", methods=["POST"])
@@ -460,18 +496,29 @@ def admin_shift_update(sid):
         abort(404)
     start = parse_hhmm(request.form.get("start"))
     end = parse_hhmm(request.form.get("end"))
-    host_id = request.form.get("host_id") or None
-    host_id = int(host_id) if host_id else None
-    if host_id and db.user_by_id(host_id) is None:
-        abort(400)
     errors = validate_shift(s["day"], start, end, exclude_id=sid)
     if errors:
         for e in errors:
             flash(e, "error")
     else:
-        db.update_shift(sid, start, end, host_id)
+        db.update_shift(sid, start, end, host_name_field())
         flash("Shift on day %d saved (%s to %s)." % (s["day"], hhmm(start), hhmm(end)), "ok")
     return redirect(url_for("admin_shifts") + "#day-%d" % s["day"])
+
+
+@app.route("/admin/shifts/<int:sid>/host", methods=["POST"])
+@login_required
+def admin_shift_host(sid):
+    """Shift logins set the displayed host name of their own shift."""
+    s = db.shift(sid)
+    if s is None:
+        abort(404)
+    if not can_manage_shift(s):
+        abort(403)
+    db.set_host_name(sid, host_name_field())
+    flash("Host name for %s saved." % shift_label(s["day"], s["start_min"],
+                                                  s["end_min"]), "ok")
+    return redirect(url_for("admin_shifts") + "#shift-%d" % sid)
 
 
 @app.route("/admin/shifts/new", methods=["POST"])
@@ -485,13 +532,12 @@ def admin_shift_new():
         abort(400)
     start = parse_hhmm(request.form.get("start"))
     end = parse_hhmm(request.form.get("end"))
-    host_id = request.form.get("host_id") or None
     errors = validate_shift(day, start, end)
     if errors:
         for e in errors:
             flash(e, "error")
     else:
-        db.create_shift(day, start, end, int(host_id) if host_id else None)
+        db.create_shift(day, start, end, host_name_field())
         flash("Shift added.", "ok")
     return redirect(url_for("admin_shifts") + "#day-%d" % day)
 
@@ -504,6 +550,9 @@ def admin_shift_delete(sid):
         abort(404)
     if db.sessions_in_shift(sid):
         flash("Move or delete this shift's sessions before deleting it.", "error")
+    elif any(x["shift_id"] == sid for x in db.shift_logins()):
+        flash("This shift has its own login. Keep it and change its times "
+              "instead.", "error")
     else:
         db.delete_shift(sid)
         flash("Shift deleted.", "ok")
@@ -605,38 +654,27 @@ def admin_session_delete(xid):
     return redirect(url_for("admin_shifts") + "#day-%d" % x["day"])
 
 
-# ------------------------------------------------------------ users
+# ------------------------------------------------------------ shift logins
 
-@app.route("/admin/users", methods=["GET", "POST"])
+@app.route("/admin/logins")
 @admin_required
-def admin_users():
-    if request.method == "POST":
-        email = request.form.get("email", "").strip()
-        name = request.form.get("name", "").strip()
-        role = request.form.get("role", "host")
-        pw = request.form.get("password", "")
-        if role not in ("admin", "host") or "@" not in email or not name:
-            flash("Enter a name, a valid email and a role.", "error")
-        elif len(pw) < 10:
-            flash("Passwords need at least 10 characters.", "error")
-        elif db.user_by_email(email):
-            flash("A user with that email already exists.", "error")
-        else:
-            db.create_user(email, name, generate_password_hash(pw), role)
-            flash("Added %s as %s." % (name, role), "ok")
-        return redirect(url_for("admin_users"))
-    return render_template("admin/users.html", users=db.users())
+def admin_logins():
+    return render_template("admin/logins.html", logins=db.shift_logins(),
+                           revealed=None)
 
 
-@app.route("/admin/users/<int:uid>/delete", methods=["POST"])
+@app.route("/admin/logins/<int:uid>/reset", methods=["POST"])
 @admin_required
-def admin_user_delete(uid):
-    if uid == g.user["id"]:
-        flash("You cannot delete your own account.", "error")
-    else:
-        db.delete_user(uid)
-        flash("User deleted. Their shifts are now unassigned.", "ok")
-    return redirect(url_for("admin_users"))
+def admin_login_reset(uid):
+    """New random password for a shift login, shown once in this response
+    (never flashed: flashes travel in the readable session cookie)."""
+    u = db.user_by_id(uid)
+    if u is None or u["role"] != "shift":
+        abort(404)
+    pw = new_password()
+    db.set_password(uid, generate_password_hash(pw))
+    return render_template("admin/logins.html", logins=db.shift_logins(),
+                           revealed=(u["username"], pw))
 
 
 # ------------------------------------------------------------ matchmaking
@@ -721,37 +759,78 @@ def admin_backlog_place():
 
 # ------------------------------------------------------------ CLI
 
-@app.cli.command("create-user")
-@click.option("--email", prompt=True)
-@click.option("--name", prompt=True)
-@click.option("--role", type=click.Choice(["admin", "host"]), default="host",
-              show_default=True)
-@click.password_option()
-def create_user_cmd(email, name, role, password):
-    """Create an admin or host account (use this to seed the global admins)."""
-    if db.user_by_email(email):
-        raise click.ClickException("A user with that email already exists.")
-    if len(password) < 10:
-        raise click.ClickException("Use at least 10 characters.")
-    db.create_user(email, name, generate_password_hash(password), role)
-    click.echo("Created %s (%s)." % (email, role))
+TEAM_USERNAME = "team"
 
 
-@app.cli.command("set-password")
-@click.option("--email", prompt=True)
-@click.password_option()
-def set_password_cmd(email, password):
-    """Reset a user's password."""
-    u = db.user_by_email(email)
+def ensure_day_shifts(day):
+    """The day's first len(DEFAULT_SHIFTS) shifts in time order, creating
+    any default shift that is missing and fits."""
+    rows = list(db.shifts(day))
+    for s, e in config.DEFAULT_SHIFTS[len(rows):]:
+        if validate_shift(day, s, e):
+            raise click.ClickException(
+                "Day %d has no room for the default %s to %s shift. Fix its "
+                "shifts in the admin first." % (day, hhmm(s), hhmm(e)))
+        db.create_shift(day, s, e)
+    return list(db.shifts(day))[:len(config.DEFAULT_SHIFTS)]
+
+
+@app.cli.command("init-logins")
+def init_logins_cmd():
+    """Create the team login and one login per host shift (idempotent).
+
+    Prints each NEW login's random password once, on stdout only. Existing
+    logins keep their password (use reset-login)."""
+    created = []
+    if db.user_by_username(TEAM_USERNAME) is None:
+        pw = new_password()
+        db.create_user(TEAM_USERNAME, generate_password_hash(pw), "team")
+        created.append((TEAM_USERNAME, pw, "team (edits everything)"))
+    linked = {x["shift_id"] for x in db.shift_logins() if x["shift_id"]}
+    for day in config.DAYS:
+        for i, s in enumerate(ensure_day_shifts(day)):
+            name = shift_username(day, i)
+            u = db.user_by_username(name)
+            if u is not None and u["role"] != "shift":
+                raise click.ClickException("%s exists but is not a shift login." % name)
+            if u is not None and u["shift_id"]:
+                continue
+            if s["id"] in linked:
+                raise click.ClickException(
+                    "Shift %s already belongs to another login." %
+                    shift_label(day, s["start_min"], s["end_min"]))
+            if u is None:
+                pw = new_password()
+                db.create_user(name, generate_password_hash(pw), "shift", s["id"])
+                created.append((name, pw, shift_label(day, s["start_min"],
+                                                      s["end_min"])))
+            else:
+                db.link_shift(u["id"], s["id"])
+            linked.add(s["id"])
+    if not created:
+        click.echo("All logins already exist. Passwords unchanged "
+                   "(flask --app app reset-login <username>).")
+        return
+    click.echo("New logins. Passwords are shown ONCE and are not stored in "
+               "plain text; hand them out now.")
+    for name, pw, what in created:
+        click.echo("%-14s %s   %s" % (name, pw, what))
+
+
+@app.cli.command("reset-login")
+@click.argument("username")
+def reset_login_cmd(username):
+    """Give a login a new random password and print it once."""
+    u = db.user_by_username(username)
     if u is None:
-        raise click.ClickException("No user with that email.")
-    db.set_password(u["id"], generate_password_hash(password))
-    click.echo("Password updated for %s." % email)
+        raise click.ClickException("No login named %r. Run init-logins first."
+                                   % username)
+    pw = new_password()
+    db.set_password(u["id"], generate_password_hash(pw))
+    click.echo("%s %s" % (u["username"], pw))
 
 
-DEMO_HOSTS = [("Demo Host A", "demo-host-a@example.invalid"),
-              ("Demo Host B", "demo-host-b@example.invalid"),
-              ("Demo Host C", "demo-host-c@example.invalid")]
+DEMO_HOSTS = ["Demo Host A", "Demo Host B", "Demo Host C"]
 
 # (day, start, end, title, type, speakers, description)
 DEMO_SESSIONS = [
@@ -794,24 +873,22 @@ DEMO_BACKLOG = [
 @app.cli.command("seed-demo")
 @click.option("--reset", is_flag=True, help="Delete existing demo data first.")
 def seed_demo_cmd(reset):
-    """Create demo hosts, ~12 demo sessions and demo matchmaking entries."""
+    """Fill empty shift host names with demo names, add ~12 demo sessions and
+    demo matchmaking entries."""
     with db.connect() as con:
         if reset:
             con.execute("DELETE FROM backlog WHERE is_demo=1")
             con.execute("DELETE FROM sessions WHERE is_demo=1")
-            con.execute("DELETE FROM users WHERE is_demo=1")
-        elif con.execute("SELECT 1 FROM users WHERE is_demo=1").fetchone():
+            con.execute("UPDATE shifts SET host_name='' WHERE host_name IN (%s)"
+                        % ",".join("?" * len(DEMO_HOSTS)), DEMO_HOSTS)
+        elif (con.execute("SELECT 1 FROM sessions WHERE is_demo=1").fetchone()
+              or con.execute("SELECT 1 FROM backlog WHERE is_demo=1").fetchone()):
             raise click.ClickException("Demo data already exists. Use --reset.")
-    host_ids = []
-    for name, email in DEMO_HOSTS:
-        # Random password: demo hosts exist to fill the agenda, not to log in.
-        host_ids.append(db.create_user(
-            email, name, generate_password_hash(secrets.token_urlsafe(18)),
-            "host", is_demo=1))
+    named = 0
     for i, s in enumerate(db.shifts()):
-        if s["host_id"] is None:
-            db.update_shift(s["id"], s["start_min"], s["end_min"],
-                            host_ids[i % len(host_ids)])
+        if not s["host_name"]:
+            db.set_host_name(s["id"], DEMO_HOSTS[i % len(DEMO_HOSTS)])
+            named += 1
     made = 0
     for day, start, end, title, typ, who, desc in DEMO_SESSIONS:
         a, b = parse_hhmm(start), parse_hhmm(end)
@@ -827,8 +904,8 @@ def seed_demo_cmd(reset):
         made += 1
     for t, who, typ, dur, contact, desc in DEMO_BACKLOG:
         db.create_backlog(t, who, typ, dur, contact, desc, None, is_demo=1)
-    click.echo("Demo data: %d hosts, %d sessions, %d matchmaking entries."
-               % (len(host_ids), made, len(DEMO_BACKLOG)))
+    click.echo("Demo data: %d demo host names, %d sessions, %d matchmaking "
+               "entries." % (named, made, len(DEMO_BACKLOG)))
 
 
 if __name__ == "__main__":

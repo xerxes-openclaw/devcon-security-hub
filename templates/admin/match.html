@@ -11,7 +11,7 @@
     <article class="shift" id="shift-{{ s.id }}">
       <div class="shift-head">
         <span class="shift-time">{{ s.start_min|hhmm }} to {{ s.end_min|hhmm }}</span>
-        <span class="host">Host: <strong>{{ s.host_name or 'unassigned' }}</strong> · {{ blk.sessions|length }} booked</span>
+        <span class="host">Host: <strong>{{ s.host_name or 'not set' }}</strong> · {{ blk.sessions|length }} booked</span>
       </div>
       {% for a, b in blk.open %}
       <div class="slot">
@@ -49,7 +49,7 @@
         <h4>{{ e.title }}</h4>
         {% if e.who %}<p>{{ e.who }}</p>{% endif %}
         {% if e.contact %}<p>Contact: {{ e.contact }}</p>{% endif %}
-        {% if user.role == 'admin' or e.created_by == user.id %}
+        {% if user.role == 'team' or e.created_by == user.id %}
         <form method="post" action="{{ url_for('admin_backlog_delete', bid=e.id) }}" class="mt-6"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="btn btn-danger btn-sm" type="submit">Remove</button></form>
         {% endif %}
       </div>

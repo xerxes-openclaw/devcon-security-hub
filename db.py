@@ -3,6 +3,7 @@
 Times are stored as minutes since midnight IST plus a day number (1-4); the
 calendar date for each day lives in config.DAYS.
 """
+import os
 import sqlite3
 import time
 from contextlib import contextmanager
@@ -10,22 +11,21 @@ from contextlib import contextmanager
 import config
 
 SCHEMA = """
-CREATE TABLE IF NOT EXISTS users(
-  id INTEGER PRIMARY KEY,
-  email TEXT UNIQUE NOT NULL COLLATE NOCASE,
-  name TEXT NOT NULL,
-  password_hash TEXT NOT NULL,
-  role TEXT NOT NULL CHECK(role IN ('admin','host')),
-  is_demo INTEGER NOT NULL DEFAULT 0,
-  created_at INTEGER NOT NULL
-);
 CREATE TABLE IF NOT EXISTS shifts(
   id INTEGER PRIMARY KEY,
   day INTEGER NOT NULL CHECK(day BETWEEN 1 AND 4),
   start_min INTEGER NOT NULL,
   end_min INTEGER NOT NULL,
-  host_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  host_name TEXT NOT NULL DEFAULT '',
   CHECK(end_min > start_min)
+);
+CREATE TABLE IF NOT EXISTS users(
+  id INTEGER PRIMARY KEY,
+  username TEXT UNIQUE NOT NULL COLLATE NOCASE,
+  password_hash TEXT NOT NULL,
+  role TEXT NOT NULL CHECK(role IN ('team','shift')),
+  shift_id INTEGER UNIQUE REFERENCES shifts(id) ON DELETE SET NULL,
+  created_at INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS sessions(
   id INTEGER PRIMARY KEY,
@@ -55,6 +55,10 @@ CREATE TABLE IF NOT EXISTS backlog(
   created_at INTEGER NOT NULL
 );
 """
+# users holds shared logins, not people: one 'team' login (global admin) and
+# one 'shift' login per host shift, linked to that shift by shift_id.
+
+USERS_DDL = [x for x in SCHEMA.split(";") if "EXISTS users(" in x][0]
 
 
 @contextmanager
@@ -74,8 +78,66 @@ def connect():
         con.close()
 
 
+def _columns(con, table):
+    return [r[1] for r in con.execute("PRAGMA table_info(%s)" % table)]
+
+
+def migrate_personal_accounts():
+    """One-way migration from the old per-person schema (users with email,
+    shifts.host_id) to shared logins (shifts.host_name, users.username).
+
+    Backs the file up first (<db>-pre-logins-<unixtime>.db next to it), keeps
+    every shift, session and matchmaking entry, copies each shift's old host
+    name into host_name, and drops the old personal accounts. Re-create the
+    logins afterwards with `flask --app app init-logins`. Returns the backup
+    path, or None when there was nothing to migrate."""
+    if not os.path.exists(config.DB_PATH):
+        return None
+    con = sqlite3.connect(config.DB_PATH, timeout=10)
+    con.isolation_level = None  # explicit BEGIN/COMMIT below
+    try:
+        if "email" not in _columns(con, "users"):
+            return None
+        stem, ext = os.path.splitext(config.DB_PATH)
+        backup = "%s-pre-logins-%d%s" % (stem, now(), ext or ".db")
+        dst = sqlite3.connect(backup)
+        con.backup(dst)
+        dst.close()
+        con.execute("PRAGMA foreign_keys=OFF")  # only takes effect outside a transaction
+        con.execute("BEGIN IMMEDIATE")
+        try:
+            con.execute(
+                "CREATE TABLE shifts_new(id INTEGER PRIMARY KEY,"
+                " day INTEGER NOT NULL CHECK(day BETWEEN 1 AND 4),"
+                " start_min INTEGER NOT NULL, end_min INTEGER NOT NULL,"
+                " host_name TEXT NOT NULL DEFAULT '', CHECK(end_min > start_min))")
+            con.execute(
+                "INSERT INTO shifts_new(id,day,start_min,end_min,host_name) "
+                "SELECT s.id, s.day, s.start_min, s.end_min, COALESCE("
+                "(SELECT u.name FROM users u WHERE u.id = s.host_id), '') "
+                "FROM shifts s")
+            con.execute("UPDATE sessions SET created_by=NULL")
+            con.execute("UPDATE backlog SET created_by=NULL")
+            con.execute("DROP TABLE shifts")
+            con.execute("ALTER TABLE shifts_new RENAME TO shifts")
+            con.execute("DROP TABLE users")
+            con.execute(USERS_DDL)
+            bad = con.execute("PRAGMA foreign_key_check").fetchall()
+            if bad:
+                raise RuntimeError("Migration left broken references: %r" % bad)
+            con.execute("COMMIT")
+        except Exception:
+            con.execute("ROLLBACK")
+            raise
+        return backup
+    finally:
+        con.close()
+
+
 def init():
-    """Create tables; on an empty DB lay out the default 3 shifts per day."""
+    """Migrate an old DB if needed, create tables, and on an empty DB lay out
+    the default 3 shifts per day."""
+    migrate_personal_accounts()
     with connect() as con:
         con.executescript(SCHEMA)
         if con.execute("SELECT COUNT(*) FROM shifts").fetchone()[0] == 0:
@@ -89,31 +151,35 @@ def now():
     return int(time.time())
 
 
-# ------------------------------------------------------------------ users
+# ------------------------------------------------------------------ logins
 
 def user_by_id(uid):
     with connect() as con:
         return con.execute("SELECT * FROM users WHERE id=?", (uid,)).fetchone()
 
 
-def user_by_email(email):
+def user_by_username(username):
     with connect() as con:
-        return con.execute("SELECT * FROM users WHERE email=?",
-                           (email.strip(),)).fetchone()
+        return con.execute("SELECT * FROM users WHERE username=?",
+                           ((username or "").strip(),)).fetchone()
 
 
-def users():
+def shift_logins():
+    """Shift logins with their shift, in agenda order."""
     with connect() as con:
-        return con.execute("SELECT * FROM users ORDER BY role, name").fetchall()
+        return con.execute(
+            "SELECT u.id, u.username, u.shift_id, s.day, s.start_min, s.end_min,"
+            " s.host_name FROM users u LEFT JOIN shifts s ON s.id = u.shift_id "
+            "WHERE u.role='shift' ORDER BY s.day, s.start_min, u.username"
+        ).fetchall()
 
 
-def create_user(email, name, password_hash, role, is_demo=0):
+def create_user(username, password_hash, role, shift_id=None):
     with connect() as con:
-        cur = con.execute(
-            "INSERT INTO users(email,name,password_hash,role,is_demo,created_at)"
-            " VALUES(?,?,?,?,?,?)",
-            (email.strip(), name.strip(), password_hash, role, is_demo, now()))
-        return cur.lastrowid
+        return con.execute(
+            "INSERT INTO users(username,password_hash,role,shift_id,created_at)"
+            " VALUES(?,?,?,?,?)",
+            (username.strip(), password_hash, role, shift_id, now())).lastrowid
 
 
 def set_password(uid, password_hash):
@@ -122,15 +188,14 @@ def set_password(uid, password_hash):
                     (password_hash, uid))
 
 
-def delete_user(uid):
+def link_shift(uid, shift_id):
     with connect() as con:
-        con.execute("DELETE FROM users WHERE id=?", (uid,))
+        con.execute("UPDATE users SET shift_id=? WHERE id=?", (shift_id, uid))
 
 
 # ----------------------------------------------------------------- shifts
 
-SHIFT_SELECT = ("SELECT s.*, u.name AS host_name FROM shifts s "
-                "LEFT JOIN users u ON u.id = s.host_id ")
+SHIFT_SELECT = "SELECT s.* FROM shifts s "
 
 
 def shifts(day=None):
@@ -146,17 +211,23 @@ def shift(sid):
         return con.execute(SHIFT_SELECT + "WHERE s.id=?", (sid,)).fetchone()
 
 
-def create_shift(day, start_min, end_min, host_id):
+def create_shift(day, start_min, end_min, host_name=""):
     with connect() as con:
         return con.execute(
-            "INSERT INTO shifts(day,start_min,end_min,host_id) VALUES(?,?,?,?)",
-            (day, start_min, end_min, host_id)).lastrowid
+            "INSERT INTO shifts(day,start_min,end_min,host_name) VALUES(?,?,?,?)",
+            (day, start_min, end_min, host_name.strip())).lastrowid
 
 
-def update_shift(sid, start_min, end_min, host_id):
+def update_shift(sid, start_min, end_min, host_name):
     with connect() as con:
-        con.execute("UPDATE shifts SET start_min=?, end_min=?, host_id=? "
-                    "WHERE id=?", (start_min, end_min, host_id, sid))
+        con.execute("UPDATE shifts SET start_min=?, end_min=?, host_name=? "
+                    "WHERE id=?", (start_min, end_min, host_name.strip(), sid))
+
+
+def set_host_name(sid, host_name):
+    with connect() as con:
+        con.execute("UPDATE shifts SET host_name=? WHERE id=?",
+                    (host_name.strip(), sid))
 
 
 def delete_shift(sid):
@@ -166,9 +237,8 @@ def delete_shift(sid):
 
 # --------------------------------------------------------------- sessions
 
-SESSION_SELECT = ("SELECT x.*, s.day, s.host_id, u.name AS host_name "
-                  "FROM sessions x JOIN shifts s ON s.id = x.shift_id "
-                  "LEFT JOIN users u ON u.id = s.host_id ")
+SESSION_SELECT = ("SELECT x.*, s.day, s.host_name "
+                  "FROM sessions x JOIN shifts s ON s.id = x.shift_id ")
 
 
 def sessions(day=None):
@@ -221,7 +291,7 @@ def delete_session(xid):
 # ---------------------------------------------------------------- backlog
 
 def backlog(open_only=False):
-    q = ("SELECT b.*, u.name AS added_by FROM backlog b "
+    q = ("SELECT b.*, u.username AS added_by FROM backlog b "
          "LEFT JOIN users u ON u.id = b.created_by ")
     if open_only:
         q += "WHERE b.session_id IS NULL "

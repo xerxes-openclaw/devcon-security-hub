@@ -6,8 +6,9 @@ in front for HTTPS, SQLite on disk. Steps only you can do are marked **[you]**.
 ## 0. Decisions **[you]**
 
 - **Domain**: pick one and point its `A` record at the server.
-- **Global admins**: the emails for Griff, Lanski and Anamarija (entered on the
-  server via the CLI, never committed).
+- **Who gets which login**: the organizers share the `team` login; each
+  shift host gets their shift's login (`tue3-shift1` ... `fri6-shift3`).
+  No emails or personal accounts.
 - **Placeholders**: Telegram invite link and hub floor/room, once known.
 
 ## 1. Server setup (Ubuntu/Debian)
@@ -29,11 +30,28 @@ chmod 600 .env
 python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 ```
 
-## 3. Create the admins
+## 3. Create the logins
 
 ```sh
-./.venv/bin/flask --app app create-user --role admin   # repeat per admin
+./.venv/bin/flask --app app init-logins
 ```
+
+This prints `team` and the 12 shift usernames, each with a random password,
+ONCE. Copy them straight into your password manager and hand each shift its
+own; they are stored only as hashes. Running it again creates only missing
+logins. To replace one password (for example after a host leaves):
+
+```sh
+./.venv/bin/flask --app app reset-login wed4-shift2
+```
+
+The team can also reset any shift login from **Shift logins** in the admin.
+A reset logs out everyone still using the old password.
+
+Upgrading a server that ran the older email-account version: just deploy;
+the app backs up `hub.db` to `hub-pre-logins-<unixtime>.db`, migrates it on
+start (shifts, sessions and host names kept, old accounts dropped), then run
+`init-logins`.
 
 Do NOT run `seed-demo` on production unless you want demo content visible.
 If you did, `flask --app app seed-demo --reset` and then delete the demo
@@ -66,7 +84,8 @@ crontab -e -u hub
 ## 7. Check
 
 - `https://your-domain/healthz` returns `{"ok": true, ...}`.
-- Log in at `/admin/login`, assign hosts to all 12 shifts.
+- Log in at `/admin/login` as `team` and fill in the host name on all 12
+  shifts (or let each shift login set its own).
 - Import `https://your-domain/agenda.ics` into a calendar and confirm one
   session lands at the right IST time.
 

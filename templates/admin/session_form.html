@@ -9,7 +9,7 @@
   <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
   <div class="field"><label for="shift_id">Shift</label>
     <select id="shift_id" name="shift_id" required>
-      {% for s in shifts %}<option value="{{ s.id }}" {% if s.id == data.shift_id %}selected{% endif %}>Day {{ s.day }}, {{ s.start_min|hhmm }} to {{ s.end_min|hhmm }} (host: {{ s.host_name or 'unassigned' }})</option>{% endfor %}
+      {% for s in shifts %}<option value="{{ s.id }}" {% if s.id == data.shift_id %}selected{% endif %}>Day {{ s.day }}, {{ s.start_min|hhmm }} to {{ s.end_min|hhmm }} (host: {{ s.host_name or 'not set' }})</option>{% endfor %}
     </select></div>
   <div class="row row-2">
     <div class="field"><label for="start">Start (IST)</label><input id="start" type="text" inputmode="numeric" pattern="[0-2][0-9]:[0-5][0-9]" placeholder="HH:MM" maxlength="5" name="start" value="{{ data.start_min|hhmm if data.start_min is not none else '' }}" required></div>

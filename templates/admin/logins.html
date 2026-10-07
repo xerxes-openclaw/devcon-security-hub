@@ -1,0 +1,31 @@
+{% extends "admin/layout.html" %}
+{% block page_title %}Shift logins{% endblock %}
+{% block content %}
+<h1>Shift logins</h1>
+<p class="lead">One shared login per host shift. A shift login can add, edit and delete sessions inside its own shift and set that shift's host name. Hand each password to whoever hosts that shift.</p>
+{% if revealed %}
+<div class="card reveal" role="alert">
+  <h2 class="card-title">New password for {{ revealed[0] }}</h2>
+  <p>Copy it now. It is shown only this once and is not stored anywhere in plain text. Anyone still logged in with the old password is logged out.</p>
+  <p class="secret"><code>{{ revealed[1] }}</code></p>
+</div>
+{% endif %}
+<div class="card table-scroll">
+  <table class="list">
+    <thead><tr><th>Username</th><th>Shift</th><th>Host name</th><th></th></tr></thead>
+    <tbody>
+    {% for l in logins %}
+    <tr>
+      <td><code>{{ l.username }}</code></td>
+      <td>{% if l.day %}{{ shift_label(l.day, l.start_min, l.end_min) }}{% else %}<span class="muted">no shift</span>{% endif %}</td>
+      <td>{{ l.host_name or '' }}{% if not l.host_name %}<span class="muted">not set</span>{% endif %}</td>
+      <td><form method="post" action="{{ url_for('admin_login_reset', uid=l.id) }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="btn btn-outline btn-sm" type="submit">Reset password</button></form></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" class="muted">No shift logins yet. Run <code>flask --app app init-logins</code> on the server.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="note">The team login's own password is reset on the server: <code>flask --app app reset-login team</code>.</p>
+{% endblock %}
