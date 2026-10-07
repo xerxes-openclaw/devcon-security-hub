@@ -8,14 +8,14 @@
 <link rel="icon" type="image/svg+xml" href="{{ favicon }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="{% block body_class %}{% endblock %}">
 <header class="topbar">
   <div class="wrap">
-    <a class="brand" href="{{ url_for('index') }}" aria-label="{{ cfg.EVENT_NAME }}: {{ cfg.HUB_NAME }}">{{ logo_svg|safe }}<span class="wordmark"><b>Security</b> Hub</span><span class="brand-event">{{ cfg.EVENT_NAME }}</span></a>
+    <a class="brand" href="{{ url_for('index') }}" aria-label="{{ cfg.EVENT_NAME }}: {{ cfg.HUB_NAME }}">{{ logo_svg|safe }}<span class="wordmark"><b>Security</b> Hub</span></a>
     <nav aria-label="Main">{% block nav %}
       <a href="{{ url_for('index') }}#agenda">Agenda</a>
       <a href="{{ url_for('index') }}#organizers">Organizers</a>
@@ -27,7 +27,7 @@
 <footer class="site">
   <div class="wrap">
     <p>{{ cfg.DISCLAIMER }}</p>
-    <p>Organized by <a href="{{ cfg.ORGANIZED_BY[1] }}" rel="noopener">{{ cfg.ORGANIZED_BY[0] }}</a> with the Ethereum security community.</p>
+    <p>Organized by <a href="{{ cfg.ORGANIZED_BY[1] }}" rel="noopener">{{ cfg.ORGANIZED_BY[0] }}</a></p>
   </div>
 </footer>
 {% block scripts %}{% endblock %}

@@ -49,6 +49,18 @@
   --shift-accent-2: #ffa366;
   --shift-accent-3: #4fbf6f;
 
+  /* devcon.org homepage surfaces */
+  --color-ink: #160b2b;            /* devcon h2 color */
+  --color-lavender: #f1ebfd;
+  --color-peach: #ffe0cc;
+  --color-paper: #fbfafc;
+  --color-hairline: rgb(34 17 68 / 10%);
+  --color-scrim: rgb(22 11 43 / 55%);
+  --intro-bg:
+    radial-gradient(ellipse 55% 45% at 0% 0%, var(--color-peach) 0%, rgb(255 224 204 / 0%) 100%),
+    radial-gradient(ellipse 55% 45% at 100% 0%, var(--color-peach) 0%, rgb(255 224 204 / 0%) 100%),
+    linear-gradient(180deg, var(--color-lavender) 0%, var(--color-paper) 100%);
+
   --hero-gradient: linear-gradient(150deg, var(--color-dark-bg) 35%, var(--color-dark-purple) 100%);
   --radius-sm: 8px;
   --radius-md: 12px;
