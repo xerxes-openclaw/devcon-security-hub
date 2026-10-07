@@ -347,7 +347,7 @@ class TestPublic(HubTestCase):
         self.assertIn("calendar.google.com/calendar/render?action=TEMPLATE", body)
         self.assertIn(config.DISCLAIMER, body)
         self.assertIn('rel="icon" type="image/svg+xml" href="data:image/svg+xml,', body)
-        self.assertNotIn("—", body)  # no em dashes in copy
+        self.assertNotIn("\u2014", body)  # no em dashes in copy
 
     def test_no_inline_styles_or_scripts(self):
         """The CSP blocks inline style attributes and inline scripts, so any
@@ -366,7 +366,7 @@ class TestPublic(HubTestCase):
         for body in pages:
             self.assertNotIn('style="', body)
             self.assertNotRegex(body, r"<script>|<script [^>]*>(?!</script>)\s*\S")
-            self.assertNotIn("—", body)
+            self.assertNotIn("\u2014", body)
 
     def test_bad_day_param_falls_back(self):
         self.assertEqual(self.c.get("/?day=9").status_code, 200)

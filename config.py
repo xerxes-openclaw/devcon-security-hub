@@ -60,7 +60,7 @@ LOGIN_ATTEMPTS_PER_MINUTE_PER_IP = 5
 
 # ------------------------------------------------------------- event facts
 # VERIFIED 2026-10-07 against the devcon.org homepage, which reads
-# "Mumbai India · 3–6 November 2026" and "Devcon will take place at the
+# "Mumbai India, 3 to 6 November 2026" (paraphrased; the site uses a dash) and "Devcon will take place at the
 # Jio World Centre". Re-check before launch; Devcon may still publish changes.
 EVENT_FACTS_VERIFIED = True
 EVENT_FACTS_SOURCE = "devcon.org homepage, checked 2026-10-07"
