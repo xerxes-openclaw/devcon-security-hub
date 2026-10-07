@@ -1,0 +1,34 @@
+{% extends "admin/layout.html" %}
+{% block page_title %}Users{% endblock %}
+{% block content %}
+<h1>Users</h1>
+<p class="lead">Global admins edit everything. Hosts edit sessions inside their own shifts. Assign hosts to shifts on the Shifts page.</p>
+<div class="card table-scroll">
+  <table class="list">
+    <thead><tr><th>Name</th><th>Email</th><th>Role</th><th></th></tr></thead>
+    <tbody>
+    {% for u in users %}
+    <tr>
+      <td>{{ u.name }}{% if u.is_demo %} <span class="badge badge-demo">Demo</span>{% endif %}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.role }}</td>
+      <td>{% if u.id != user.id %}<form method="post" action="{{ url_for('admin_user_delete', uid=u.id) }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="btn btn-danger btn-sm" type="submit">Delete</button></form>{% endif %}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<form class="card" method="post">
+  <h2 class="card-title">Add a user</h2>
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="row row-2">
+    <div class="field"><label for="name">Name</label><input id="name" type="text" name="name" required></div>
+    <div class="field"><label for="email">Email</label><input id="email" type="email" name="email" required></div>
+  </div>
+  <div class="row row-2">
+    <div class="field"><label for="role">Role</label><select id="role" name="role"><option value="host">Host</option><option value="admin">Global admin</option></select></div>
+    <div class="field"><label for="password">Starting password (10+ characters)</label><input id="password" type="password" name="password" minlength="10" autocomplete="new-password" required></div>
+  </div>
+  <button class="btn btn-primary" type="submit">Add user</button>
+</form>
+{% endblock %}

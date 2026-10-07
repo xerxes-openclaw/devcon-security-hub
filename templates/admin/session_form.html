@@ -1,0 +1,33 @@
+{% extends "admin/layout.html" %}
+{% block page_title %}{{ 'Edit session' if existing else 'New session' }}{% endblock %}
+{% block content %}
+<h1>{{ 'Edit session' if existing else 'New session' }}</h1>
+<p class="lead">Sessions must fit inside their shift and may not overlap another session that day.</p>
+{% if errors %}<ul class="errors" role="alert">{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+{% if warnings %}<ul class="warnings">{% for w in warnings %}<li>{{ w }}</li>{% endfor %}</ul>{% endif %}
+<form class="card" method="post">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="field"><label for="shift_id">Shift</label>
+    <select id="shift_id" name="shift_id" required>
+      {% for s in shifts %}<option value="{{ s.id }}" {% if s.id == data.shift_id %}selected{% endif %}>Day {{ s.day }}, {{ s.start_min|hhmm }} to {{ s.end_min|hhmm }} (host: {{ s.host_name or 'unassigned' }})</option>{% endfor %}
+    </select></div>
+  <div class="row row-2">
+    <div class="field"><label for="start">Start (IST)</label><input id="start" type="text" inputmode="numeric" pattern="[0-2][0-9]:[0-5][0-9]" placeholder="HH:MM" maxlength="5" name="start" value="{{ data.start_min|hhmm if data.start_min is not none else '' }}" required></div>
+    <div class="field"><label for="end">End (IST)</label><input id="end" type="text" inputmode="numeric" pattern="[0-2][0-9]:[0-5][0-9]" placeholder="HH:MM" maxlength="5" name="end" value="{{ data.end_min|hhmm if data.end_min is not none else '' }}" required></div>
+  </div>
+  <div class="field"><label for="title">Title</label><input id="title" type="text" name="title" value="{{ data.title }}" maxlength="160" required></div>
+  <div class="row row-2">
+    <div class="field"><label for="type">Type</label>
+      <select id="type" name="type">{% for t in cfg.SESSION_TYPES %}<option value="{{ t }}" {% if t == data.type %}selected{% endif %}>{{ t }}</option>{% endfor %}</select></div>
+    <div class="field"><label for="speakers">Speakers</label><input id="speakers" type="text" name="speakers" value="{{ data.speakers }}" maxlength="300"></div>
+  </div>
+  <div class="field"><label for="description">Short description</label><textarea id="description" name="description" maxlength="1200">{{ data.description }}</textarea></div>
+  {% if warnings %}
+  <div class="field"><label class="check"><input type="checkbox" name="ack_gap" value="1"> Save anyway with a gap under {{ cfg.MIN_GAP_MINUTES }} minutes</label></div>
+  {% endif %}
+  <div class="inline-actions">
+    <button class="btn btn-primary" type="submit">{{ 'Save session' if existing else 'Add session' }}</button>
+    <a class="btn btn-outline" href="{{ url_for('admin_shifts') }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

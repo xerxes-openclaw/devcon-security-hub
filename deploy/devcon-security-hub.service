@@ -1,0 +1,26 @@
+# systemd unit: runs the hub under gunicorn, restarts on crash/reboot.
+# Install:  sudo cp deploy/devcon-security-hub.service /etc/systemd/system/
+#           sudo systemctl daemon-reload
+#           sudo systemctl enable --now devcon-security-hub
+# Logs:     journalctl -u devcon-security-hub -f
+# Adjust User and the paths to match where you cloned the repo.
+[Unit]
+Description=Devcon 8 India Security Hub site
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=hub
+WorkingDirectory=/home/hub/devcon-security-hub
+Environment=FLASK_APP=app
+ExecStart=/home/hub/devcon-security-hub/serve-prod.sh
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/home/hub/devcon-security-hub
+
+[Install]
+WantedBy=multi-user.target

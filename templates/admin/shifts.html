@@ -1,0 +1,74 @@
+{% extends "admin/layout.html" %}
+{% block page_title %}Shifts{% endblock %}
+{% block content %}
+<h1>Shifts and sessions</h1>
+<p class="lead">Signed in as {{ user.name }} ({{ 'global admin' if user.role == 'admin' else 'host' }}).
+  {% if user.role == 'host' %}You can add and edit sessions inside your own shifts.{% endif %}</p>
+<p class="note"><strong>Handover:</strong> {{ cfg.HANDOVER_NOTE }}</p>
+
+{% for d in days %}
+<h2 class="day-title" id="day-{{ d.n }}">Day {{ d.n }}, {{ d.date.strftime('%a %d %b') }}: {{ d.theme }}</h2>
+{% for blk in d.shifts %}{% set s = blk.shift %}{% set mine = can_manage_shift(s) %}
+<article class="shift">
+  {% if user.role == 'admin' %}
+  <form class="shift-edit" method="post" action="{{ url_for('admin_shift_update', sid=s.id) }}">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="field"><label for="st-{{ s.id }}">Start</label><input id="st-{{ s.id }}" type="text" inputmode="numeric" pattern="[0-2][0-9]:[0-5][0-9]" placeholder="HH:MM" maxlength="5" name="start" value="{{ s.start_min|hhmm }}" required></div>
+    <div class="field"><label for="en-{{ s.id }}">End</label><input id="en-{{ s.id }}" type="text" inputmode="numeric" pattern="[0-2][0-9]:[0-5][0-9]" placeholder="HH:MM" maxlength="5" name="end" value="{{ s.end_min|hhmm }}" required></div>
+    <div class="field"><label for="h-{{ s.id }}">Host</label>
+      <select id="h-{{ s.id }}" name="host_id">
+        <option value="">Unassigned</option>
+        {% for h in hosts %}<option value="{{ h.id }}" {% if h.id == s.host_id %}selected{% endif %}>{{ h.name }}{% if h.role == 'admin' %} (admin){% endif %}</option>{% endfor %}
+      </select></div>
+    <div class="inline-actions"><button class="btn btn-primary btn-sm" type="submit">Save shift</button></div>
+  </form>
+  {% else %}
+  <div class="shift-head">
+    <span class="shift-time">{{ s.start_min|hhmm }} to {{ s.end_min|hhmm }}</span>
+    <span class="host">Host: <strong>{{ s.host_name or 'unassigned' }}</strong>{% if mine %} (you){% endif %}</span>
+  </div>
+  {% endif %}
+  {% if blk.sessions %}
+  <ul class="sessions">
+    {% for x in blk.sessions %}
+    <li class="session">
+      <div class="s-time">{{ x.start_min|hhmm }}<small>to {{ x.end_min|hhmm }}</small></div>
+      <div>
+        <div class="badges"><span class="badge badge-type">{{ x.type }}</span>{% if x.is_demo %}<span class="badge badge-demo">Demo</span>{% endif %}</div>
+        <h4 class="s-title">{{ x.title }}</h4>
+        {% if x.speakers %}<p class="s-who">{{ x.speakers }}</p>{% endif %}
+        {% if mine %}
+        <div class="inline-actions mt-8">
+          <a class="btn btn-outline btn-sm" href="{{ url_for('admin_session_edit', xid=x.id) }}">Edit</a>
+          <form method="post" action="{{ url_for('admin_session_delete', xid=x.id) }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="btn btn-danger btn-sm" type="submit">Delete</button></form>
+        </div>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}<p class="empty">No sessions yet.</p>{% endif %}
+  {% if mine %}
+  <div class="inline-actions shift-foot">
+    <a class="btn btn-outline btn-sm" href="{{ url_for('admin_session_new', shift=s.id) }}">Add a session to this shift</a>
+    {% if user.role == 'admin' and not blk.sessions %}
+    <form method="post" action="{{ url_for('admin_shift_delete', sid=s.id) }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="btn btn-danger btn-sm" type="submit">Delete shift</button></form>
+    {% endif %}
+  </div>
+  {% endif %}
+</article>
+{% endfor %}
+{% if user.role == 'admin' %}
+<details class="card">
+  <summary><strong>Add a shift on day {{ d.n }}</strong></summary>
+  <form class="row row-4 mt-12" method="post" action="{{ url_for('admin_shift_new') }}">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}"><input type="hidden" name="day" value="{{ d.n }}">
+    <div class="field"><label for="ns-{{ d.n }}">Start</label><input id="ns-{{ d.n }}" type="text" inputmode="numeric" pattern="[0-2][0-9]:[0-5][0-9]" placeholder="HH:MM" maxlength="5" name="start" required></div>
+    <div class="field"><label for="ne-{{ d.n }}">End</label><input id="ne-{{ d.n }}" type="text" inputmode="numeric" pattern="[0-2][0-9]:[0-5][0-9]" placeholder="HH:MM" maxlength="5" name="end" required></div>
+    <div class="field"><label for="nh-{{ d.n }}">Host</label><select id="nh-{{ d.n }}" name="host_id"><option value="">Unassigned</option>{% for h in hosts %}<option value="{{ h.id }}">{{ h.name }}</option>{% endfor %}</select></div>
+    <div class="field self-end"><button class="btn btn-primary btn-sm" type="submit">Add shift</button></div>
+  </form>
+</details>
+{% endif %}
+{% endfor %}
+{% endblock %}

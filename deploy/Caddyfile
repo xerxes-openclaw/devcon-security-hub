@@ -1,0 +1,7 @@
+# Caddy reverse proxy: automatic HTTPS in front of gunicorn.
+# sudo cp deploy/Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy
+# Point the domain's A/AAAA record at this server first. Change the domain.
+security-hub.example.org {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:4590
+}

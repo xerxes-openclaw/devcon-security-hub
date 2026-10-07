@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block body %}
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div class="lockup"><span>{{ cfg.EVENT_NAME }}</span><span class="dot" aria-hidden="true"></span><span>Community Hub</span></div>
+    <h1 class="wordmark"><b>Security</b> Hub</h1>
+    <p class="mission">{{ cfg.MISSION }}</p>
+    <ul class="facts">
+      <li><span class="k">Dates</span><span>{{ first.day }} to {{ last.day }} {{ last.strftime('%B %Y') }}</span></li>
+      <li><span class="k">Hours</span><span>{{ cfg.HUB_OPEN_MIN|hhmm }} to {{ cfg.HUB_CLOSE_MIN|hhmm }} IST daily</span></li>
+      <li><span class="k">Venue</span><span>{{ cfg.EVENT_VENUE }}, {{ cfg.EVENT_CITY }}</span></li>
+      <li><span class="k">Where</span><span class="placeholder">{{ cfg.HUB_LOCATION }}</span></li>
+    </ul>
+    <div class="actions">
+      {% if cfg.TELEGRAM_URL %}
+      <a class="btn btn-primary" href="{{ cfg.TELEGRAM_URL }}" rel="noopener">Join the Telegram group</a>
+      {% else %}
+      <span class="btn btn-primary btn-disabled" aria-disabled="true">Telegram group link coming soon</span>
+      {% endif %}
+      <a class="btn btn-ghost-dark" href="{{ url_for('agenda_ics') }}">Subscribe to the agenda (.ics)</a>
+      <a class="btn btn-ghost-dark" href="{{ cfg.PROPOSAL_URL }}" rel="noopener">Read the hub proposal</a>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="agenda">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Agenda</p>
+        <h2>Four days, three host shifts a day</h2>
+      </div>
+      <p class="muted tz-note">All times IST (Asia/Kolkata)</p>
+    </div>
+    {% if has_demo %}<p class="demo-banner" role="note"><strong>Demo content.</strong> Sessions marked Demo are placeholders while the real program is confirmed.</p>{% endif %}
+
+    <div class="tabs" role="tablist" aria-label="Hub days">
+      {% for d in days %}
+      <a class="tab" role="tab" id="tab-{{ d.n }}" href="?day={{ d.n }}#agenda" aria-controls="day-{{ d.n }}" aria-selected="{{ 'true' if d.n == active else 'false' }}" data-day="{{ d.n }}">
+        <span class="d">Day {{ d.n }} <span class="tab-date">{{ d.date.strftime('%a %d') }}</span></span>
+        <span class="t">{{ d.theme }}</span>
+      </a>
+      {% endfor %}
+    </div>
+
+    {% for d in days %}
+    <div class="day" id="day-{{ d.n }}" role="tabpanel" aria-labelledby="tab-{{ d.n }}" {% if d.n != active %}hidden{% endif %}>
+      <div class="day-head">
+        <h3>Day {{ d.n }}: {{ d.theme }}</h3>
+        <p>{{ d.date.strftime('%A %d %B') }}. {{ d.blurb }}</p>
+      </div>
+      {% for blk in d.shifts %}{% set s = blk.shift %}
+      <article class="shift" aria-label="Shift {{ s.start_min|hhmm }} to {{ s.end_min|hhmm }}">
+        <div class="shift-head">
+          <span class="shift-time">{{ s.start_min|hhmm }} to {{ s.end_min|hhmm }}</span>
+          <span class="host">Host: <strong>{{ s.host_name or 'to be announced' }}</strong></span>
+        </div>
+        {% if blk.sessions %}
+        <ul class="sessions">
+          {% for x in blk.sessions %}
+          <li class="session">
+            <div class="s-time">{{ x.start_min|hhmm }}<small>to {{ x.end_min|hhmm }}</small></div>
+            <div>
+              <div class="badges"><span class="badge badge-type">{{ x.type }}</span>{% if x.is_demo %}<span class="badge badge-demo">Demo</span>{% endif %}</div>
+              <h4 class="s-title">{{ x.title }}</h4>
+              {% if x.speakers %}<p class="s-who">{{ x.speakers }}</p>{% endif %}
+              {% if x.description %}<p class="s-desc">{{ x.description }}</p>{% endif %}
+              <div class="cal">
+                <a class="btn btn-outline btn-sm" href="{{ gcal_link(x) }}" target="_blank" rel="noopener">Add to Google Calendar</a>
+                <a class="btn btn-outline btn-sm" href="{{ url_for('session_ics', xid=x.id) }}">Download .ics</a>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="empty">Open time. The program for this shift is still being shaped.</p>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="block block-tight" id="organizers">
+  <div class="wrap">
+    <p class="eyebrow">Organizers</p>
+    <h2 class="h2-sm">The team running the hub</h2>
+    <ul class="org-grid">
+      {% for name, url in cfg.ORGANIZERS %}
+      <li><a href="{{ url }}" rel="noopener">{{ name }}<span>@{{ url.rsplit('/', 1)[-1] }} on X</span></a></li>
+      {% endfor %}
+    </ul>
+    <p class="credit">Organized by <a href="{{ cfg.ORGANIZED_BY[1] }}" rel="noopener">{{ cfg.ORGANIZED_BY[0] }}</a>, with SEAL contributors, ETHSecurity Badge holders and other Ethereum security contributors.
+      Selected as a <a href="{{ cfg.HUBS_ANNOUNCEMENT_URL }}" rel="noopener">Devcon 8 India Community Hub</a>. Want to speak, host or volunteer? Comment on the <a href="{{ cfg.PROPOSAL_URL }}" rel="noopener">proposal</a>.</p>
+  </div>
+</section>
+</main>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='agenda.js') }}"></script>{% endblock %}

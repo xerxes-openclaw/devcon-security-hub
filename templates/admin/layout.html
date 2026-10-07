@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{% block page_title %}Admin{% endblock %} | {{ cfg.HUB_NAME }}{% endblock %}
+{% block body_class %}admin{% endblock %}
+{% block nav %}
+  {% if user %}
+  <a href="{{ url_for('admin_shifts') }}" {% if request.endpoint == 'admin_shifts' %}aria-current="page"{% endif %}>Shifts</a>
+  <a href="{{ url_for('admin_match') }}" {% if request.endpoint == 'admin_match' %}aria-current="page"{% endif %}>Matchmaking</a>
+  {% if user.role == 'admin' %}<a href="{{ url_for('admin_users') }}" {% if request.endpoint == 'admin_users' %}aria-current="page"{% endif %}>Users</a>{% endif %}
+  <a href="{{ url_for('index') }}">Public site</a>
+  <form method="post" action="{{ url_for('logout') }}" class="inline-form"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button type="submit">Log out</button></form>
+  {% else %}
+  <a href="{{ url_for('index') }}">Public site</a>
+  {% endif %}
+{% endblock %}
+{% block body %}
+<main><div class="wrap">
+  {% with msgs = get_flashed_messages(with_categories=true) %}{% if msgs %}
+  <ul class="flash" role="status">{% for cat, m in msgs %}<li class="{{ cat }}">{{ m }}</li>{% endfor %}</ul>
+  {% endif %}{% endwith %}
+  {% block content %}{% endblock %}
+</div></main>
+{% endblock %}

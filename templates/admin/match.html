@@ -1,0 +1,77 @@
+{% extends "admin/layout.html" %}
+{% block page_title %}Matchmaking{% endblock %}
+{% block content %}
+<h1>Matchmaking board</h1>
+<p class="lead">Open time in each shift on the left, content looking for a slot on the right. Pick an entry and a start time to place it; this creates the session.</p>
+<div class="match-grid">
+  <div>
+    {% for d in days %}
+    <h2 class="day-title">Day {{ d.n }}, {{ d.date.strftime('%a %d %b') }}</h2>
+    {% for blk in d.shifts %}{% set s = blk.shift %}
+    <article class="shift" id="shift-{{ s.id }}">
+      <div class="shift-head">
+        <span class="shift-time">{{ s.start_min|hhmm }} to {{ s.end_min|hhmm }}</span>
+        <span class="host">Host: <strong>{{ s.host_name or 'unassigned' }}</strong> · {{ blk.sessions|length }} booked</span>
+      </div>
+      {% for a, b in blk.open %}
+      <div class="slot">
+        <div class="slot-time">{{ a|hhmm }} to {{ b|hhmm }} <span>({{ b - a }} min open)</span></div>
+        {% set fits = entries|selectattr('duration_min', 'le', b - a)|list %}
+        {% if blk.manage and fits %}
+        <form method="post" action="{{ url_for('admin_backlog_place') }}">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}"><input type="hidden" name="shift_id" value="{{ s.id }}">
+          <label class="sr-only" for="e-{{ s.id }}-{{ a }}">Entry</label>
+          <select id="e-{{ s.id }}-{{ a }}" name="entry_id">
+            {% for e in fits %}<option value="{{ e.id }}">{{ e.title }} ({{ e.duration_min }} min)</option>{% endfor %}
+          </select>
+          <label class="sr-only" for="t-{{ s.id }}-{{ a }}">Start</label>
+          <input id="t-{{ s.id }}-{{ a }}" type="text" inputmode="numeric" pattern="[0-2][0-9]:[0-5][0-9]" placeholder="HH:MM" maxlength="5" name="start" value="{{ a|hhmm }}">
+          <label class="check"><input type="checkbox" name="ack_gap" value="1"> Save anyway</label>
+          <button class="btn btn-primary btn-sm" type="submit">Place</button>
+        </form>
+        {% elif blk.manage and entries %}
+        <p class="muted small-note">No waiting entry fits this gap.</p>
+        {% endif %}
+      </div>
+      {% else %}
+      <p class="empty">Fully booked.</p>
+      {% endfor %}
+    </article>
+    {% endfor %}
+    {% endfor %}
+  </div>
+  <aside>
+    <div class="card">
+      <h2 class="card-title">Looking for a slot ({{ entries|length }})</h2>
+      {% for e in entries %}
+      <div class="entry">
+        <div class="badges"><span class="badge badge-type">{{ e.type }}</span><span class="badge">{{ e.duration_min }} min</span>{% if e.is_demo %}<span class="badge badge-demo">Demo</span>{% endif %}</div>
+        <h4>{{ e.title }}</h4>
+        {% if e.who %}<p>{{ e.who }}</p>{% endif %}
+        {% if e.contact %}<p>Contact: {{ e.contact }}</p>{% endif %}
+        {% if user.role == 'admin' or e.created_by == user.id %}
+        <form method="post" action="{{ url_for('admin_backlog_delete', bid=e.id) }}" class="mt-6"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="btn btn-danger btn-sm" type="submit">Remove</button></form>
+        {% endif %}
+      </div>
+      {% else %}<p class="muted">Nothing waiting.</p>{% endfor %}
+    </div>
+    <form class="card" method="post" action="{{ url_for('admin_backlog_new') }}">
+      <h2 class="card-title">Add content looking for a slot</h2>
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <div class="field"><label for="b-title">Title</label><input id="b-title" type="text" name="title" required maxlength="160"></div>
+      <div class="field"><label for="b-who">Who</label><input id="b-who" type="text" name="who" maxlength="300"></div>
+      <div class="row row-2">
+        <div class="field"><label for="b-type">Type</label><select id="b-type" name="type">{% for t in cfg.SESSION_TYPES %}<option value="{{ t }}">{{ t }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="b-dur">Minutes</label><input id="b-dur" type="number" name="duration" min="5" max="540" step="5" value="30" required></div>
+      </div>
+      <div class="field"><label for="b-contact">Contact (admin-only)</label><input id="b-contact" type="text" name="contact" maxlength="200"></div>
+      <div class="field"><label for="b-desc">Short description</label><textarea id="b-desc" name="description" maxlength="1200"></textarea></div>
+      <button class="btn btn-primary" type="submit">Add to the list</button>
+    </form>
+    {% if placed %}
+    <div class="card"><h2 class="card-title">Already placed</h2>
+      {% for e in placed %}<p class="muted placed">{{ e.title }}</p>{% endfor %}</div>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+/* THEME: every color and font in the site lives here. Swap this one file to
+   rebrand. Palette taken from the devcon.org site code (Devcon 8 India).
+   The favicon/logo in app.py (LOGO_SVG) repeats primary, primary-light and
+   saffron as literals because SVG favicons cannot read CSS variables. */
+:root {
+  /* fonts (loaded from Google Fonts in base.html) */
+  --font-display: "Poppins", system-ui, sans-serif;
+  --font-ui: "Inter", system-ui, sans-serif;
+  --font-wordmark: "Inter", system-ui, sans-serif; /* "Security" 700 + "Hub" 300, per the official logo */
+  --font-mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* brand */
+  --color-primary: #7235ed;
+  --color-primary-hover: #6028cc;
+  --color-primary-light: #a077f3;
+  --color-saffron: #ffa366;
+  --color-mint: #aaeaba;
+
+  /* dark surfaces (hero, footer) */
+  --color-dark-bg: #160b2b;
+  --color-dark-purple: #221144;
+  --color-on-dark: #ffffff;
+  --color-on-dark-muted: rgb(255 255 255 / 70%);
+  --color-on-dark-border: rgb(255 255 255 / 30%);
+
+  /* light surfaces */
+  --color-surface: #f9f8fa;
+  --color-surface-raised: #ffffff;
+  --color-surface-alt: #fbfafc;
+  --color-surface-sunk: #f2f1f4;
+  --color-border: #dddae2;
+
+  /* text on light */
+  --color-text: #1a0d33;
+  --color-text-secondary: #594d73;
+  --color-text-muted: #9188a2;
+
+  /* states */
+  --color-ok-bg: #e6f8ea;
+  --color-ok-text: #1d5c2e;
+  --color-warn-bg: #fff1e6;
+  --color-warn-text: #7a3b0c;
+  --color-error-bg: #fde8e8;
+  --color-error-text: #8a1c1c;
+  --color-type-bg: rgb(114 53 237 / 10%);
+
+  /* per-shift accent stripes (1st, 2nd, 3rd shift of the day) */
+  --shift-accent-1: #7235ed;
+  --shift-accent-2: #ffa366;
+  --shift-accent-3: #4fbf6f;
+
+  --hero-gradient: linear-gradient(150deg, var(--color-dark-bg) 35%, var(--color-dark-purple) 100%);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --shadow-card: 0 1px 2px rgb(26 13 51 / 6%), 0 6px 20px rgb(26 13 51 / 6%);
+  --focus-ring: 0 0 0 3px rgb(114 53 237 / 35%);
+}
