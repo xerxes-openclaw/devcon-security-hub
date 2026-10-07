@@ -96,12 +96,14 @@ img { max-width: 100%; }
 .photos { padding: 0 0 56px; background: var(--color-paper); }
 .photo-row { display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 12px; align-items: center; }
 .photo-row img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 16px; }
-.photo-row img:nth-child(2) { aspect-ratio: 5 / 4; }
+.photo-row > a { display: block; cursor: zoom-in; border-radius: 16px; }
+.photo-row > a:nth-child(2) img { aspect-ratio: 5 / 4; }
 .photo-note { margin: 12px 0 0; font-size: 13px; color: var(--color-text-muted); text-align: center; }
 @media (max-width: 640px) {
   .photo-row { grid-template-columns: 1fr 1fr; gap: 8px; }
   .photo-row img { border-radius: 12px; }
-  .photo-row img:nth-child(2) { grid-column: 1 / -1; order: -1; aspect-ratio: 3 / 2; }
+  .photo-row > a:nth-child(2) { grid-column: 1 / -1; order: -1; }
+  .photo-row > a:nth-child(2) img { aspect-ratio: 3 / 2; }
 }
 
 /* ---------- programme (reads like the Devcon app schedule) */
@@ -281,3 +283,10 @@ table.list th { font-size: 12px; text-transform: uppercase; letter-spacing: .05e
 .secret code { font-size: 18px; user-select: all; word-break: break-all; }
 @media (min-width: 760px) { .shift-edit.shift-edit-host { grid-template-columns: 1fr auto; } }
 .admin .shift.shift-mine { border: 2px solid var(--color-primary, var(--color-border)); }
+
+/* Photo lightbox */
+.lightbox { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; padding: 24px; background: rgb(22 11 43 / 88%); cursor: zoom-out; }
+.lightbox.is-open { display: flex; }
+.lightbox img { max-width: min(1400px, 100%); max-height: 100%; width: auto; height: auto; border-radius: 12px; box-shadow: 0 20px 60px rgb(0 0 0 / 45%); }
+.lightbox button { position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgb(255 255 255 / 15%); color: #fff; font-size: 26px; line-height: 44px; cursor: pointer; }
+.lightbox button:hover { background: rgb(255 255 255 / 28%); }

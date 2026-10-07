@@ -32,9 +32,9 @@
 <section class="photos" aria-label="Devcon community">
   <div class="wrap">
     <div class="photo-row">
-      <img src="{{ url_for('static', filename='img/devcon/photo-crowd.jpg') }}" alt="Attendees talking in a hallway at Devcon" loading="lazy" width="700" height="470">
-      <img src="{{ url_for('static', filename='img/devcon/photo-map.jpg') }}" alt="A wall map covered in attendee photos linked by string" loading="lazy" width="900" height="600">
-      <img src="{{ url_for('static', filename='img/devcon/photo-cowork.jpg') }}" alt="The Devcon co-working floor lit in purple" loading="lazy" width="700" height="470">
+      <a class="zoom" href="{{ url_for('static', filename='img/devcon/photo-crowd.jpg') }}"><img src="{{ url_for('static', filename='img/devcon/photo-crowd.jpg') }}" alt="Attendees talking in a hallway at Devcon" loading="lazy" width="700" height="470"></a>
+      <a class="zoom" href="{{ url_for('static', filename='img/devcon/photo-map-full.jpg') }}"><img src="{{ url_for('static', filename='img/devcon/photo-map.jpg') }}" alt="A wall map covered in attendee photos linked by string" loading="lazy" width="900" height="600"></a>
+      <a class="zoom" href="{{ url_for('static', filename='img/devcon/photo-cowork.jpg') }}"><img src="{{ url_for('static', filename='img/devcon/photo-cowork.jpg') }}" alt="The Devcon co-working floor lit in purple" loading="lazy" width="700" height="470"></a>
     </div>
   </div>
 </section>
@@ -113,4 +113,4 @@
 <div class="moon-band" aria-hidden="true"></div>
 </main>
 {% endblock %}
-{% block scripts %}<script src="{{ url_for('static', filename='agenda.js') }}"></script>{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='agenda.js') }}"></script><script src="{{ url_for('static', filename='lightbox.js') }}"></script>{% endblock %}
