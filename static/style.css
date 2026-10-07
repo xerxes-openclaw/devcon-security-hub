@@ -164,9 +164,10 @@ img { max-width: 100%; }
 .org-list a { display: block; text-decoration: none; color: var(--color-ink); }
 .org-photo { display: block; width: 112px; height: 112px; margin: 0 auto 14px; object-fit: cover; border-radius: 50%; box-shadow: 0 0 0 3px var(--color-paper), 0 0 0 4px var(--color-border, #dddae2); }
 .org-photo.is-square { border-radius: 16px; }
-.org-list b { display: block; font-size: 20px; font-weight: 600; }
-.org-list span { font-size: 14px; color: var(--color-text-muted); }
-.org-list a:hover span { color: var(--color-primary); }
+.org-list b { display: block; font-size: 20px; font-weight: 600; color: var(--color-ink); }
+.org-links { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 4px; font-size: 14px; }
+.org-links a { display: inline-flex; align-items: center; gap: 5px; color: var(--color-text-muted); }
+.org-links a:hover { color: var(--color-primary); }
 .join { margin: 48px 0 0; font-size: 15px; color: var(--color-text-secondary); line-height: 1.8; }
 .moon-band { position: relative; height: 100px; background: var(--color-lavender); }
 .moon-band::after { content: ""; position: absolute; inset: 0; opacity: .3;
