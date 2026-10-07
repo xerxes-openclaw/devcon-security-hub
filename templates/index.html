@@ -104,9 +104,7 @@
       {% for name, url, photo, tg in cfg.ORGANIZERS %}
       <li><img class="org-photo" src="{{ url_for('static', filename='img/organizers/' + photo) }}" alt="{{ name }}" width="112" height="112" loading="lazy"><b>{{ name }}</b>
         <span class="org-links">
-          <a href="https://t.me/{{ tg }}" rel="noopener" aria-label="{{ name }} on Telegram"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M21.9 4.3 18.6 20c-.2 1.1-.9 1.4-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.2-8.3c.4-.4-.1-.6-.6-.2L6 13.6 1.1 12c-1.1-.3-1.1-1.1.2-1.6L20.5 3c.9-.3 1.7.2 1.4 1.3Z"/></svg>@{{ tg }}</a>
-          <a href="{{ url }}" rel="noopener" aria-label="{{ name }} on X"><svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="currentColor" d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-6.9-6.1 6.9H1.3l7.9-9L.9 2.3h7l4.8 6.3 5.5-6.3Zm-1.2 17.9h1.9L7.1 4.2H5.1l11.9 16Z"/></svg></a>
-        </span></li>
+          <a href="https://t.me/{{ tg }}" rel="noopener" aria-label="{{ name }} on Telegram"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M21.9 4.3 18.6 20c-.2 1.1-.9 1.4-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.2-8.3c.4-.4-.1-.6-.6-.2L6 13.6 1.1 12c-1.1-.3-1.1-1.1.2-1.6L20.5 3c.9-.3 1.7.2 1.4 1.3Z"/></svg>@{{ tg }}</a>        </span></li>
       {% endfor %}
     </ul>
     <p class="join">Want to speak, host or volunteer? Comment on the <a href="{{ cfg.PROPOSAL_URL }}" rel="noopener">hub proposal</a>.<br>
