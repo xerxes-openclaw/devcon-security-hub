@@ -109,11 +109,11 @@ HUBS_ANNOUNCEMENT_URL = "https://forum.devcon.org/t/announcing-the-devcon-8-indi
 TELEGRAM_URL = ENV.get("TELEGRAM_URL", "").strip()
 
 ORGANIZERS = [
-    ("Anamarija", "https://x.com/anamarie_com"),
-    ("Griff Green", "https://x.com/griffgreen"),
-    ("Lanski", "https://x.com/Pol_Lanski"),
-    ("Jake", "https://x.com/GivJake"),
-    ("Cotabe", "https://x.com/Cotabe_M"),
+    ("Anamarija", "https://x.com/anamarie_com", "anamarija.jpg"),
+    ("Griff Green", "https://x.com/griffgreen", "griff.jpg"),
+    ("Lanski", "https://x.com/Pol_Lanski", "lanski.jpg"),
+    ("Jake", "https://x.com/GivJake", "jake.jpg"),
+    ("Cotabe", "https://x.com/Cotabe_M", "cotabe.jpg"),
 ]
 ORGANIZED_BY = ("TheDAO Security Fund", "https://thedao.fund/")
 DISCLAIMER = ("Community-run hub. Not an official Devcon or Ethereum "

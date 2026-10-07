@@ -101,8 +101,8 @@
   <div class="wrap">
     <p class="eyebrow">Organizers</p>
     <ul class="org-list">
-      {% for name, url in cfg.ORGANIZERS %}
-      <li><a href="{{ url }}" rel="noopener"><b>{{ name }}</b><span>@{{ url.rsplit('/', 1)[-1] }}</span></a></li>
+      {% for name, url, photo in cfg.ORGANIZERS %}
+      <li><a href="{{ url }}" rel="noopener"><img class="org-photo" src="{{ url_for('static', filename='img/organizers/' + photo) }}" alt="{{ name }}" width="112" height="112" loading="lazy"><b>{{ name }}</b><span>@{{ url.rsplit('/', 1)[-1] }}</span></a></li>
       {% endfor %}
     </ul>
     <p class="join">Want to speak, host or volunteer? Comment on the <a href="{{ cfg.PROPOSAL_URL }}" rel="noopener">hub proposal</a>.<br>
