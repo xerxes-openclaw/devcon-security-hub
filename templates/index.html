@@ -104,6 +104,18 @@
   </div>
 </section>
 
+<section class="people" id="organizers">
+  <div class="wrap">
+    <p class="eyebrow">Organizers</p>
+    <ul class="org-list">
+      {% for name, url, logo in cfg.ORGANIZERS %}
+      <li><a href="{{ url }}" rel="noopener"><img class="org-photo org-logo" src="{{ url_for('static', filename='img/orgs/' + logo) }}" alt="{{ name }} logo" width="112" height="112" loading="lazy"><b>{{ name }}</b></a></li>
+      {% endfor %}
+    </ul>
+    <p class="join">One of the <a href="{{ cfg.HUBS_ANNOUNCEMENT_URL }}" rel="noopener">Devcon 8 India Community Hubs</a>.</p>
+  </div>
+</section>
+
 <section class="faq" id="faq">
   <div class="wrap">
     <p class="eyebrow">FAQ</p>
@@ -117,18 +129,6 @@
       <details class="faq-item"><summary>Where is the hub located?</summary><p>Location inside Devcon coming soon.</p></details>
       <details class="faq-item"><summary>When is the hub open?</summary><p>Security Hub will run during Devcon. Full hours coming soon.</p></details>
     </div>
-  </div>
-</section>
-
-<section class="people" id="organizers">
-  <div class="wrap">
-    <p class="eyebrow">Organizers</p>
-    <ul class="org-list">
-      {% for name, url, logo in cfg.ORGANIZERS %}
-      <li><a href="{{ url }}" rel="noopener"><img class="org-photo org-logo" src="{{ url_for('static', filename='img/orgs/' + logo) }}" alt="{{ name }} logo" width="112" height="112" loading="lazy"><b>{{ name }}</b></a></li>
-      {% endfor %}
-    </ul>
-    <p class="join">One of the <a href="{{ cfg.HUBS_ANNOUNCEMENT_URL }}" rel="noopener">Devcon 8 India Community Hubs</a>.</p>
   </div>
 </section>
 <div class="moon-band" aria-hidden="true"></div>
