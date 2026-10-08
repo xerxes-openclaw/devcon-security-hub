@@ -309,3 +309,7 @@ table.list th { font-size: 12px; text-transform: uppercase; letter-spacing: .05e
   .home .topbar nav { flex-wrap: nowrap; gap: 0; }
   .home .topbar nav a { font-size: 13px; padding: 8px 6px; white-space: nowrap; }
 }
+
+.org-list > li > a { display: block; text-decoration: none; color: var(--color-ink); }
+.org-list > li > a:hover b { color: var(--color-primary); }
+.org-logo { border-radius: 24px; }

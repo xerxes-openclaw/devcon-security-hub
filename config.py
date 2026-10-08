@@ -109,12 +109,13 @@ HUBS_ANNOUNCEMENT_URL = "https://forum.devcon.org/t/announcing-the-devcon-8-indi
 TELEGRAM_URL = ENV.get("TELEGRAM_URL", "").strip()
 
 ORGANIZERS = [
-    # (name, X url, photo, Telegram handle)
-    ("Anamarija", "https://x.com/anamarie_com", "anamarija.jpg", "anamarija09"),
-    ("Griff Green", "https://x.com/griffgreen", "griff.jpg", "GriffGreen"),
-    ("Lanski", "https://x.com/Pol_Lanski", "lanski.jpg", "Lanski13"),
-    ("Jake", "https://x.com/GivJake", "jake.jpg", "Snakeagram"),
-    ("Cotabe", "https://x.com/Cotabe_M", "cotabe.jpg", "Cotabe"),
+    # (name, X url, logo file in static/img/orgs). Order set by Zep 2026-10-08:
+    # TheDAO Security Fund first, SEAL second. All confirmed per Anamarija.
+    ("TheDAO Security Fund", "https://x.com/thedaofund", "thedao.jpg"),
+    ("SEAL", "https://x.com/_SEAL_Org", "seal.png"),
+    ("ChainSecurity", "https://x.com/chain_security", "chainsecurity.jpg"),
+    ("zeroShadow", "https://x.com/zeroshadow_io", "zeroshadow.jpg"),
+    ("Argot", "https://x.com/argotorg", "argot.jpg"),
 ]
 ORGANIZED_BY = ("TheDAO Security Fund", "https://thedao.fund/")
 DISCLAIMER = ("Community-run hub. Not an official Devcon or Ethereum "
