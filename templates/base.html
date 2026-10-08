@@ -17,7 +17,9 @@
   <div class="wrap">
     <a class="brand" href="{{ url_for('index') }}" aria-label="{{ cfg.EVENT_NAME }}: {{ cfg.HUB_NAME }}">{{ logo_svg|safe }}<span class="wordmark"><b>Security</b> Hub</span></a>
     <nav aria-label="Main">{% block nav %}
-      <a href="{{ url_for('index') }}#agenda">Agenda</a>
+      <a href="{{ url_for('index') }}#program">Program</a>
+      <a href="{{ url_for('index') }}#get-involved">Get involved</a>
+      <a href="{{ url_for('index') }}#faq">FAQ</a>
       <a href="{{ url_for('index') }}#organizers">Organizers</a>
     {% endblock %}</nav>
   </div>
