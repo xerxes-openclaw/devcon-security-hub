@@ -96,7 +96,7 @@
 @media (min-width: 46.01rem) {
   .hero::before {
     background:
-      linear-gradient(90deg, rgba(8, 5, 15, 0.72) 0%, rgba(8, 5, 15, 0.55) 36%, rgba(8, 5, 15, 0.18) 72%, rgba(8, 5, 15, 0.12) 100%),
+      linear-gradient(90deg, rgba(8, 5, 15, 0.8) 0%, rgba(8, 5, 15, 0.62) 36%, rgba(8, 5, 15, 0.18) 72%, rgba(8, 5, 15, 0.12) 100%),
       linear-gradient(0deg, var(--ink) 0%, transparent 28%);
   }
 }
