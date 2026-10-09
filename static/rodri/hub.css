@@ -90,3 +90,13 @@
 
 /* Zep 2026-10-09: FAQ as a small title above the FAQ headline. */
 .faq-heading .faq-kicker { font: 600 1.05rem/1.2 var(--mono); font-weight: 600; letter-spacing: 0.22em; margin-bottom: 1.4rem; }
+
+/* Rodri 2026-10-09: left side of the hero was too dark and hid the circuit animation.
+   Lighter left gradient on desktop; mobile keeps its own overlay. */
+@media (min-width: 46.01rem) {
+  .hero::before {
+    background:
+      linear-gradient(90deg, rgba(8, 5, 15, 0.72) 0%, rgba(8, 5, 15, 0.55) 36%, rgba(8, 5, 15, 0.18) 72%, rgba(8, 5, 15, 0.12) 100%),
+      linear-gradient(0deg, var(--ink) 0%, transparent 28%);
+  }
+}
