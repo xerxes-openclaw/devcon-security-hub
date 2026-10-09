@@ -1,14 +1,7 @@
-/* Hub additions on top of Rodri's rodri.css (kept verbatim). Only what real
-   data needs (host shifts, demo tag, calendar feed, login) and the tokens,
-   spacing and type of rodri.css. Loaded only by public_base.html. */
-
-/* Topbar: log in link + Rodri's JOIN THE HUB button */
-.topbar-actions{justify-self:end;display:flex;align-items:center;gap:1.8rem}
-.nav-login{color:var(--muted);font:500 .68rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;transition:color .18s;position:relative}
-.nav-login:after{content:"";background:var(--magenta);height:1px;transition:transform .18s;position:absolute;bottom:-.7rem;left:0;right:0;transform:scaleX(0)}
-.nav-login:hover,.nav-login[aria-current]{color:var(--text)}
-.nav-login[aria-current]:after{transform:scaleX(1)}
-.nav-login:hover:after{transform:scaleX(1)}
+/* Hub additions on top of Rodri's rodri.css (his V1.1 index.css, kept
+   verbatim). Only what real data needs (host shifts, demo tag, calendar
+   feed, login page) and the tokens, spacing and type of rodri.css. Loaded
+   only by public_base.html. */
 
 /* Hero: poster sits under the video; reduced motion gets the poster only */
 .hero-poster{z-index:-4}
@@ -35,46 +28,31 @@
 .faq-item p a,.footer>p a{color:var(--violet);text-decoration:underline;text-underline-offset:.2em}
 .faq-item p a:hover,.footer>p a:hover{color:var(--magenta)}
 
-@media (width<=46rem){
-  .topbar-actions{gap:1.2rem}
+@media (max-width:46rem){
   .shift-head{padding:.9rem 1rem}
   .shift-empty{padding:1.4rem 1rem 1.4rem 3rem}
 }
 
-/* ---------------------------------------------------------- login */
-.login-page{isolation:isolate;min-height:100vh;min-height:100svh;justify-content:center;align-items:center;padding:8rem 1.5rem 4rem;display:flex;position:relative}
+/* ---------------------------------------------------------- login
+   Rodri's V1.1 login modal (.login-modal etc. in rodri.css) shown as a
+   standalone page instead of an overlay. */
+.login-page{isolation:isolate;min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:8rem 1.5rem 4rem;position:relative}
 .login-page .hero-grid{opacity:.24;-webkit-mask-image:radial-gradient(circle at 50% 45%,#000,#0000 70%);mask-image:radial-gradient(circle at 50% 45%,#000,#0000 70%)}
-.login-card{border:1px solid var(--line);-webkit-backdrop-filter:blur(.6rem);backdrop-filter:blur(.6rem);background:#120b20d9;width:min(100%,27rem);padding:2.6rem 2.4rem 2.4rem;position:relative}
-.login-card:before{content:"";background:linear-gradient(var(--magenta),var(--violet));width:2px;position:absolute;top:2.6rem;bottom:2.6rem;left:-1px;box-shadow:0 0 .7rem #e84ad28c}
-.login-shield{width:3.4rem;height:auto;margin-bottom:1.6rem;display:block}
-.login-card h1{letter-spacing:-.05em;margin:1.2rem 0 2rem;font-size:clamp(2.6rem,9vw,3.4rem);font-weight:600;line-height:.9}
-.login-card .field{flex-direction:column;gap:.6rem;margin-bottom:1.3rem;display:flex}
-.login-card label{color:var(--violet);font:600 .56rem/1 var(--mono);letter-spacing:.16em;text-transform:uppercase}
-.login-card input{border:1px solid var(--line);background:#08050fb3;min-height:3.2rem;color:var(--text);font:500 .9rem/1 var(--mono);letter-spacing:.03em;width:100%;padding:0 1rem;transition:border-color .18s,box-shadow .18s}
-.login-card input:hover{border-color:#b489ff66}
-.login-card input:focus{border-color:var(--magenta);outline:0;box-shadow:0 0 0 1px var(--magenta),0 0 1rem #e84ad240}
-.login-card .button{cursor:pointer;border:0;width:100%;margin-top:1rem}
-.login-errors,.login-flash{color:var(--magenta);border:1px solid var(--line-bright);background:#e84ad214;margin:0 0 1.5rem;padding:.9rem 1rem;font:500 .68rem/1.5 var(--mono);letter-spacing:.04em}
+.login-errors,.login-flash{position:relative;color:var(--magenta);border:1px solid var(--line-bright);background:#e84ad214;margin:0 0 1.5rem;padding:.9rem 1rem;font:500 .68rem/1.5 var(--mono);letter-spacing:.04em}
 .login-flash li.ok{color:var(--violet)}
-.login-note{color:var(--muted);margin:1.6rem 0 0;font:500 .56rem/1.6 var(--mono);letter-spacing:.12em;text-transform:uppercase}
-.login-note a{color:var(--violet)}
-.login-note a:hover{color:var(--magenta)}
-@media (width<=46rem){
-  .login-page{align-items:flex-start;padding:7rem 1rem 3rem}
-  .login-card{padding:2rem 1.4rem 1.6rem}
+@media (max-width:46rem){
+  .login-page{padding:6.5rem .75rem 2rem}
 }
 
 /* Zep 2026-10-09: nav sits on the hero video and was hard to read.
-   Dark glass backing + brighter text for the links, login and CTA. */
-.nav, .nav-login, .nav-cta {
+   Dark glass backing + brighter text for the links. (JOIN THE HUB already
+   has an opaque dark fill in V1.1, its ::after layer.) */
+.nav {
   background: rgba(10, 7, 20, .62);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border: 1px solid var(--line);
+  padding: .95rem 1.5rem;
 }
-.nav { padding: .95rem 1.5rem; }
-.nav a, .nav-login { color: #e4dcf2; }
-.nav-login { padding: .95rem 1.1rem; }
-.nav a:after, .nav-login:after { bottom: -.35rem; }
-.topbar-actions { gap: .75rem; }
-.nav-cta { background: rgba(10, 7, 20, .62); border-color: var(--line-bright); }
+.nav a { color: #e4dcf2; }
+.nav a:after { bottom: -.35rem; }

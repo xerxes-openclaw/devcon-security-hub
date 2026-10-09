@@ -8,7 +8,7 @@
 <link rel="icon" type="image/svg+xml" href="{{ favicon }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-{# Rodri's compiled stylesheet, verbatim (it @imports Inter Tight + IBM Plex Mono). #}
+{# Rodri's stylesheet: Tailwind preflight + his V1.1 src/index.css verbatim (it @imports Inter Tight + IBM Plex Mono). #}
 <link rel="stylesheet" href="{{ url_for('static', filename='rodri/rodri.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='rodri/hub.css') }}">
 </head>
@@ -23,8 +23,8 @@
     <a href="{{ url_for('index') }}#organizers">Organizers</a>
     <a href="{{ url_for('index') }}#faq">FAQ</a>
   </nav>
-  <div class="topbar-actions">
-    <a class="nav-cta" href="{{ cfg.TELEGRAM_URL or (url_for('index') + '#get-involved') }}"{% if cfg.TELEGRAM_URL %} rel="noopener"{% endif %}>JOIN THE HUB <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg></a>
+  <div class="nav-actions">
+    <a class="nav-cta" href="{{ cfg.TELEGRAM_URL or (url_for('index') + '#get-involved') }}"{% if cfg.TELEGRAM_URL %} rel="noopener"{% endif %}>{% include "_chip_circuit.html" %}<span>JOIN THE HUB</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg></a>
   </div>
   {% endblock %}
 </header>

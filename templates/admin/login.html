@@ -2,23 +2,26 @@
 {% block title %}Log in | {{ cfg.HUB_NAME }}{% endblock %}
 {% block body_class %}login{% endblock %}
 {% block body %}
+{# Rodri's V1.1 login modal, served as a page (no login link on the public site). #}
 <main class="login-page">
   <div class="hero-grid" aria-hidden="true"></div>
-  <div class="login-card">
-    <img class="login-shield" src="{{ url_for('static', filename='rodri/shield.svg') }}" alt="" width="148" height="176">
-    <div class="eyebrow"><span class="eyebrow-node"></span>ADMIN / HOSTS AND TEAM</div>
-    <h1>LOG IN</h1>
+  <section class="login-modal" aria-labelledby="login-title">
+    <div class="login-modal-grid" aria-hidden="true"></div>
+    <a class="login-close" href="{{ url_for('index') }}" aria-label="Back to the public site"><span></span><span></span></a>
+    <div class="eyebrow"><span class="eyebrow-node"></span>SECURE ACCESS / NODE AUTH</div>
+    <h1 class="login-title" id="login-title">ENTER THE<br><span>NETWORK.</span></h1>
+    <p class="login-copy">Sign in to access contributor tools and Security Hub coordination.</p>
     {% with msgs = get_flashed_messages(with_categories=true) %}{% if msgs %}
     <ul class="login-flash" role="status">{% for cat, m in msgs %}<li class="{{ cat }}">{{ m }}</li>{% endfor %}</ul>
     {% endif %}{% endwith %}
     {% if error %}<ul class="errors login-errors" role="alert"><li>{{ error }}</li></ul>{% endif %}
-    <form method="post">
+    <form class="login-form" method="post">
       <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
-      <div class="field"><label for="username">Username</label><input id="username" type="text" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="64" required></div>
-      <div class="field"><label for="password">Password</label><input id="password" type="password" name="password" autocomplete="current-password" required></div>
-      <button class="button button-primary" type="submit"><span>Log in</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg></button>
+      <label><span>USERNAME</span><input id="username" type="text" name="username" placeholder="Your hub login" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="64" autofocus required></label>
+      <label><span>PASSWORD</span><input id="password" type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required></label>
+      <button class="button button-primary login-submit" type="submit">{% include "_chip_circuit.html" %}<span class="button-label">Continue</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg></button>
     </form>
-    <p class="login-note">Shared logins for the hub team and shift hosts. <a href="{{ url_for('index') }}">Back to the public site</a></p>
-  </div>
+    <div class="login-footer"><span>SHARED HUB LOGINS</span><span>TEAM / HOSTS</span></div>
+  </section>
 </main>
 {% endblock %}

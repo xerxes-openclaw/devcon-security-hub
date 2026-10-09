@@ -2,6 +2,7 @@
 {% block body_class %}home{% endblock %}
 {% block body %}
 {% set arrow %}<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg>{% endset %}
+{% set chip %}{% include "_chip_circuit.html" %}{% endset %}
 {% set city = cfg.EVENT_CITY.split(',')[0] %}
 {% set date_range = '%02d TO %02d %s' % (first.day, last.day, last.strftime('%b %Y')|upper) %}
 <main>
@@ -16,12 +17,18 @@
     <h1 class="hero-title" id="hero-title"><span>SECURITY</span><span class="fuzzy-text">IS A PUBLIC</span><span class="fuzzy-text">GOOD.</span></h1>
     <p class="hero-copy">{{ cfg.MISSION }}</p>
     <div class="hero-actions">
-      <a class="button button-primary" href="#program"><span>Explore the program</span>{{ arrow }}</a>
-      <a class="button button-secondary" href="#get-involved"><span>Get involved</span>{{ arrow }}</a>
+      <a class="button button-primary" href="#program">{{ chip }}<span class="button-label">Explore the program</span>{{ arrow }}</a>
+      <a class="button button-secondary" href="#get-involved">{{ chip }}<span class="button-label">Get involved</span>{{ arrow }}</a>
     </div>
     <div class="hero-meta">
-      <div><span>DATE</span><strong>{{ date_range }}</strong></div>
-      <div><span>LOCATION</span><strong>{{ cfg.EVENT_VENUE|upper }} &middot; {{ city|upper }}</strong></div>
+      <div class="hero-meta-card">
+        <img class="hero-meta-art" src="{{ url_for('static', filename='rodri/date-crystal.webp') }}" alt="" width="400" height="400" aria-hidden="true">
+        <div class="hero-meta-copy"><span>DATE</span><strong>{{ date_range }}</strong></div>
+      </div>
+      <div class="hero-meta-card">
+        <img class="hero-meta-art" src="{{ url_for('static', filename='rodri/location-pin.webp') }}" alt="" width="400" height="400" aria-hidden="true">
+        <div class="hero-meta-copy"><span>LOCATION</span><strong>{{ cfg.EVENT_VENUE|upper }} &middot; {{ city|upper }}</strong></div>
+      </div>
     </div>
   </div>
   <div class="scroll-indicator" aria-hidden="true"><span>SCROLL TO DECRYPT</span><i></i></div>
@@ -30,6 +37,7 @@
 <div class="circuit-divider" aria-hidden="true"><span>NODE_01 / PROGRAM</span><i></i><b></b><i></i></div>
 
 <section class="program section" id="program" aria-labelledby="program-title">
+  <img class="program-background" src="{{ url_for('static', filename='rodri/program-network.webp') }}" alt="" width="2172" height="724" aria-hidden="true" loading="lazy">
   <div class="section-heading">
     <div>
       <div class="eyebrow"><span class="eyebrow-node"></span>PROGRAM / {{ cfg.HUB_OPEN_MIN|hhmm }} TO {{ cfg.HUB_CLOSE_MIN|hhmm }} IST</div>
@@ -88,7 +96,7 @@
     <div class="eyebrow"><span class="eyebrow-node"></span>OPEN CHANNEL / GET INVOLVED</div>
     <h2 class="display-title" id="involved-title">SPEAK. HOST.<br><span class="fuzzy-text">VOLUNTEER.</span></h2>
     <p>Want to give a talk or run a workshop? Tell us what you have in mind. We&rsquo;ll need help with session support, speaker coordination, welcoming visitors, and keeping the space running smoothly.</p>
-    <a class="button button-primary" href="https://t.me/anamarija09" target="_blank" rel="noopener"><span>Propose a talk</span>{{ arrow }}</a>
+    <a class="button button-primary" href="https://t.me/anamarija09" target="_blank" rel="noopener">{{ chip }}<span class="button-label">Propose a talk</span>{{ arrow }}</a>
   </div>
 </section>
 
@@ -102,7 +110,7 @@
   </div>
   <div class="organizer-grid">
     {% for name, url, logo in cfg.ORGANIZERS %}
-    <a class="organizer-card" href="{{ url }}" target="_blank" rel="noopener"><span class="organizer-index">{{ '%02d' % loop.index }}</span><img src="{{ url_for('static', filename='img/orgs/' + logo) }}" alt="{{ name }} logo" width="112" height="112" loading="lazy"><strong>{{ name }}</strong>{{ arrow }}</a>
+    <a class="organizer-card" href="{{ url }}" target="_blank" rel="noopener"><span class="organizer-index">{{ '%02d' % loop.index }}</span><div class="organizer-logo"><img src="{{ url_for('static', filename='img/orgs/' + logo) }}" alt="{{ name }} logo" width="112" height="112" loading="lazy"></div><strong>{{ name }}</strong>{{ arrow }}</a>
     {% endfor %}
   </div>
 </section>
@@ -119,7 +127,7 @@
     ("Do I need to be a security expert to attend?", "No. Security Hub is open to experts, builders, students, funders, and anyone curious about Ethereum security."),
     ("Will there be beginner-friendly sessions?", "Yes. Some sessions will be technical, but we are also planning beginner-friendly talks, Q&amp;A sessions, and open conversations."),
     ("Do I need a Devcon ticket?", "Yes, the hub is inside the Devcon venue and a part of the main conference activities, so you need the ticket to get in."),
-    ("Can I propose a talk or workshop?", 'Yes, if you want to propose something contact <a href="https://t.me/anamarija09" rel="noopener">@anamarija09</a> on TG.'),
+    ("Can I propose a talk or workshop?", 'Yes. If you want to propose something, contact <a href="https://t.me/anamarija09" target="_blank" rel="noopener">@anamarija09</a> on Telegram.'),
     ("Can I volunteer?", "Yes. We&rsquo;ll need help with session support, speaker coordination, welcoming visitors, and keeping the space running smoothly."),
     ("Where is the hub located?", "Location inside Devcon coming soon."),
     ("When is the hub open?", "Security Hub will run during Devcon. Full hours coming soon."),

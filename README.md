@@ -68,8 +68,11 @@ you can instead delete `hub.db` and run `init-logins` and `seed-demo`.
   only. `EVENT_FACTS_VERIFIED` and its comment record where the dates came
   from.
 - **Placeholders**: `TELEGRAM_URL`, `HUB_LOCATION`, `HANDOVER_NOTE` in `.env`.
-- **Public page + login design**: Rodri's design (Figma Make).
-  `static/rodri/rodri.css` is his compiled stylesheet, kept verbatim;
+- **Public page + login design**: Rodri's design (Figma Make, V1.1).
+  `static/rodri/rodri.css` is Tailwind's preflight plus his V1.1
+  `src/index.css` verbatim (no build step); the login page is his V1.1
+  login modal served as a page. His crystal and network PNGs are served as
+  resized WebP (`date-crystal`, `location-pin`, `program-network`);
   `static/rodri/hub.css` adds only what real data and the login need;
   `static/rodri/hub.js` ports his interactions (day tabs, fuzzy headline).
   Templates: `public_base.html`, `index.html`, `admin/login.html`.
