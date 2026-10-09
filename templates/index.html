@@ -100,11 +100,10 @@
     <div>
       <h2 class="display-title" id="organizers-title">ORGANIZERS</h2>
     </div>
-    <p>Independent teams securing the future of Ethereum.</p>
   </div>
   <div class="organizer-grid">
     {% for name, url, logo in cfg.ORGANIZERS %}
-    <a class="organizer-card" href="{{ url }}" target="_blank" rel="noopener"><span class="organizer-index">{{ '%02d' % loop.index }}</span><div class="organizer-logo"><img src="{{ url_for('static', filename='img/orgs/' + logo) }}" alt="{{ name }} logo" width="112" height="112" loading="lazy"></div><strong>{{ name }}</strong>{{ arrow }}</a>
+    <a class="organizer-card" href="{{ url }}" target="_blank" rel="noopener"><div class="organizer-logo"><img src="{{ url_for('static', filename='img/orgs/' + logo) }}" alt="{{ name }} logo" width="112" height="112" loading="lazy"></div><strong>{{ name }}</strong>{{ arrow }}</a>
     {% endfor %}
   </div>
 </section>

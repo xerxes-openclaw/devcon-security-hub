@@ -80,3 +80,10 @@
 }
 .nav a { color: #e4dcf2; }
 .nav a:after { bottom: -.35rem; }
+
+/* Zep 2026-10-09: no index numbers on organizer cards, logos bigger. */
+.organizer-logo { width: 8.5rem; height: 8.5rem; }
+.organizer-logo img { width: 84%; height: 84%; }
+@media (max-width: 640px) {
+  .organizer-logo { width: 6.5rem; height: 6.5rem; }
+}
