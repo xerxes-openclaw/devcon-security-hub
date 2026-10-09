@@ -429,7 +429,10 @@ class TestPublic(HubTestCase):
         # full feed stays linked.
         self.assertNotIn("calendar.google.com/calendar/render", body)
         self.assertIn('href="/agenda.ics"', body)
-        self.assertIn('href="/admin/login"', body)  # LOG IN in the nav
+        self.assertNotIn('href="/admin/login"', body)  # no login link on the page (Zep)
+        r = self.c.get("/login")
+        self.assertEqual(r.status_code, 302)
+        self.assertTrue(r.headers["Location"].endswith("/admin/login"))
         self.assertIn('rel="icon" type="image/svg+xml" href="data:image/svg+xml,', body)
         self.assertNotIn("\u2014", body)  # no em dashes in copy
 

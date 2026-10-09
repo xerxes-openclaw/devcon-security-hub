@@ -440,6 +440,12 @@ def healthz():
 
 # ------------------------------------------------------------ auth
 
+@app.route("/login")
+def login_shortcut():
+    # Zep 2026-10-09: no login link on the page; admins type /login.
+    return redirect(url_for("login"))
+
+
 @app.route("/admin/login", methods=["GET", "POST"])
 def login():
     error = None
