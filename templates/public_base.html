@@ -24,7 +24,7 @@
     <a href="{{ url_for('index') }}#faq">FAQ</a>
   </nav>
   <div class="nav-actions">
-    <a class="nav-cta" href="{{ cfg.TELEGRAM_URL or (url_for('index') + '#get-involved') }}"{% if cfg.TELEGRAM_URL %} rel="noopener"{% endif %}>{% include "_chip_circuit.html" %}<span>JOIN THE HUB</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg></a>
+    <a class="nav-cta" href="{{ cfg.DEVCON_TICKETS_URL }}" rel="noopener" target="_blank">{% include "_chip_circuit.html" %}<span>JOIN THE HUB</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg></a>
   </div>
   {% endblock %}
 </header>

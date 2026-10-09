@@ -105,6 +105,9 @@ SESSION_TYPES = ["talk", "workshop", "fishbowl", "roundtable", "game",
 # ---------------------------------------------------------------- links
 PROPOSAL_URL = "https://forum.devcon.org/t/devcon-8-india-community-hub-security-hub/8786"
 HUBS_ANNOUNCEMENT_URL = "https://forum.devcon.org/t/announcing-the-devcon-8-india-community-hubs/9191"
+# Nav "JOIN THE HUB" button goes to Devcon ticket sales (Zep 2026-10-09).
+DEVCON_TICKETS_URL = "https://devcon.org/en/tickets/"
+
 # PLACEHOLDER: the Telegram group does not exist yet. Set TELEGRAM_URL in .env.
 TELEGRAM_URL = ENV.get("TELEGRAM_URL", "").strip()
 
