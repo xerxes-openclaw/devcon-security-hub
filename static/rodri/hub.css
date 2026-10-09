@@ -11,12 +11,28 @@
 .day-tab{color:inherit;text-decoration:none}
 .schedule[hidden]{display:none}
 
-/* Host shifts inside a day */
+/* Program timetable (Zep 2026-10-09, variant A: big start time column).
+   No decorative counters: day tabs are weekday + date, sessions lead with
+   the start time in the display face, end time in mono underneath. */
+.day-tab span{text-transform:uppercase}
+.day-tab strong{font:500 2.4rem/.9 var(--display);letter-spacing:-.05em}
+.day-tab strong small{color:var(--muted);font:500 .68rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;vertical-align:.35em;margin-left:.15rem}
+.day-tab.is-active strong small{color:var(--violet)}
+
+/* Host shifts inside a day: a band with the shift range and its host */
 .shift+.shift{border-top:1px solid var(--line)}
-.shift-head{color:var(--muted);font:500 .58rem/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--line);background:#08050f59;flex-wrap:wrap;justify-content:space-between;gap:.6rem 1.5rem;padding:1rem 1.8rem;display:flex}
-.shift-head .shift-time{color:var(--violet);text-transform:none}
+.shift-head{color:var(--muted);font:500 .6rem/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--line);background:var(--surface-high);flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:.6rem 1.5rem;padding:1.15rem 1.8rem;display:flex;position:relative}
+.shift-head:before{content:"";background:linear-gradient(var(--magenta),var(--violet));width:2px;position:absolute;top:-1px;bottom:-1px;left:-1px}
+.shift-head .shift-time{color:var(--violet);font:500 1rem/1 var(--mono);letter-spacing:.04em;text-transform:none}
 .shift-head strong{color:var(--text);font-weight:500}
-.shift-empty{color:var(--muted);margin:0;padding:1.8rem 1.8rem 1.8rem calc(1.8rem + 3rem);font-size:.86rem;line-height:1.5}
+.shift-empty{color:var(--muted);margin:0;padding:1.8rem 1.8rem 1.8rem calc(1.8rem + 7rem + 1.5rem);font-size:.86rem;line-height:1.5}
+
+/* Sessions: time column + content (Rodri's index and link columns dropped) */
+.session{grid-template-columns:7rem minmax(0,1fr);gap:1.5rem;min-height:0}
+.session-time{color:var(--muted);padding-top:0;font:500 .62rem/1 var(--mono);letter-spacing:.05em;flex-direction:column;gap:.55rem;display:flex}
+.session-time strong{color:var(--text);font:500 2.1rem/.9 var(--display);letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+.session:hover .session-time strong{color:var(--magenta)}
+.session-main h3{margin-top:.75rem}
 .session-tags span.is-demo{border-color:var(--line-bright);color:var(--magenta)}
 
 /* Calendar feed link under the program intro */
@@ -29,8 +45,16 @@
 .faq-item p a:hover,.footer>p a:hover{color:var(--magenta)}
 
 @media (max-width:46rem){
-  .shift-head{padding:.9rem 1rem}
-  .shift-empty{padding:1.4rem 1rem 1.4rem 3rem}
+  .day-tab{padding:1.1rem}
+  .day-tab strong{font-size:2rem}
+  .shift-head{padding:1rem}
+  .shift-head .shift-time{font-size:.9rem}
+  .shift-empty{padding:1.4rem 1rem}
+  .session{grid-template-columns:minmax(0,1fr);gap:.9rem;padding:1.4rem 1rem}
+  .session-time,.session-main{grid-column:1}
+  .session-time{flex-direction:row;align-items:baseline;gap:.7rem}
+  .session-time strong{font-size:1.75rem}
+  .session-main{grid-row:2}
 }
 
 /* ---------------------------------------------------------- login

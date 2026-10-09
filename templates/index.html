@@ -46,7 +46,7 @@
 
   <div class="day-tabs" role="tablist" aria-label="Program days" id="agenda">
     {% for d in days %}
-    <a class="day-tab{% if d.n == active %} is-active{% endif %}" role="tab" id="tab-{{ d.n }}" href="?day={{ d.n }}#program" aria-controls="day-{{ d.n }}" aria-selected="{{ 'true' if d.n == active else 'false' }}" data-day="{{ d.n }}"><span>DAY_{{ '%02d' % d.n }}</span><strong>{{ '%02d' % d.date.day }} {{ d.date.strftime('%b')|upper }}</strong><i></i></a>
+    <a class="day-tab{% if d.n == active %} is-active{% endif %}" role="tab" id="tab-{{ d.n }}" href="?day={{ d.n }}#program" aria-controls="day-{{ d.n }}" aria-selected="{{ 'true' if d.n == active else 'false' }}" data-day="{{ d.n }}"><span>{{ d.date.strftime('%A') }}</span><strong>{{ d.date.day }} <small>{{ d.date.strftime('%b') }}</small></strong><i></i></a>
     {% endfor %}
   </div>
 
@@ -54,7 +54,6 @@
   {% set day_demo = d.shifts|map(attribute='sessions')|sum(start=[])|selectattr('is_demo')|list %}
   <div class="schedule" id="day-{{ d.n }}" role="tabpanel" aria-labelledby="tab-{{ d.n }}"{% if d.n != active %} hidden{% endif %}>
     <div class="schedule-intro">
-      <span class="schedule-number">{{ '%02d' % d.n }}</span>
       <div>
         <span>{{ d.date.strftime('%a') }} {{ d.date.day }} {{ d.date.strftime('%b') }}{% if day_demo %} &middot; Sessions marked demo{% endif %}</span>
         <h3>{{ d.theme }}</h3>
@@ -62,14 +61,12 @@
       </div>
     </div>
     <div class="session-list">
-      {% set ns = namespace(i=0) %}
       {% for blk in d.shifts %}{% set s = blk.shift %}
       <div class="shift" role="group" aria-label="Shift {{ s.start_min|hhmm }} to {{ s.end_min|hhmm }}">
         <div class="shift-head"><span class="shift-time">{{ s.start_min|hhmm }} to {{ s.end_min|hhmm }}</span><span class="host">Host: <strong>{{ s.host_name or 'to be announced' }}</strong></span></div>
-        {% for x in blk.sessions %}{% set ns.i = ns.i + 1 %}
+        {% for x in blk.sessions %}
         <article class="session">
-          <div class="session-index">{{ '%02d' % ns.i }}</div>
-          <div class="session-time">{{ x.start_min|hhmm }} to {{ x.end_min|hhmm }}</div>
+          <div class="session-time"><strong>{{ x.start_min|hhmm }}</strong><span>to {{ x.end_min|hhmm }}</span></div>
           <div class="session-main">
             <div class="session-tags"><span>{{ x.type }}</span>{% if x.speakers %}<span>{{ x.speakers }}</span>{% endif %}{% if x.is_demo %}<span class="is-demo">Demo</span>{% endif %}</div>
             <h3>{{ x.title }}</h3>
