@@ -10,8 +10,8 @@ Community-run hub. Not an official Devcon or Ethereum Foundation page.
 ## What it does
 
 - **Public agenda**: four day tabs, three host shifts per day, sessions inside
-  each shift. Every session has an "Add to Google Calendar" link and a
-  `.ics` download; `/agenda.ics` is the full feed. Times are IST.
+  each shift. `/agenda.ics` is the full calendar feed, linked from the
+  program. Times are IST.
 - **Admin** (`/admin`, username + password; shared logins, no personal
   accounts, no email):
   - `team`: the organizers' shared login. Edits everything: shift times,
@@ -68,7 +68,14 @@ you can instead delete `hub.db` and run `init-logins` and `seed-demo`.
   only. `EVENT_FACTS_VERIFIED` and its comment record where the dates came
   from.
 - **Placeholders**: `TELEGRAM_URL`, `HUB_LOCATION`, `HANDOVER_NOTE` in `.env`.
-- **Colors and fonts**: `static/theme.css` only (Devcon 8 palette from the
+- **Public page + login design**: Rodri's design (Figma Make).
+  `static/rodri/rodri.css` is his compiled stylesheet, kept verbatim;
+  `static/rodri/hub.css` adds only what real data and the login need;
+  `static/rodri/hub.js` ports his interactions (day tabs, fuzzy headline).
+  Templates: `public_base.html`, `index.html`, `admin/login.html`.
+  The hero video `static/rodri/hero.mp4` is a 2 MB re-encode of his 17.7 MB
+  original (never commit the original).
+- **Admin colors and fonts**: `static/theme.css` (Devcon 8 palette from the
   devcon.org site code, Poppins + Inter).
 - **Logo**: the official hub logo is `static/img/logo-full.jpg`. The header
   and favicon use a faithful SVG redraw of its shield mark (`LOGO_SVG` in

@@ -425,7 +425,11 @@ class TestPublic(HubTestCase):
         for n, (_d, theme, _b) in config.DAYS.items():
             self.assertIn(theme, body)
         self.assertEqual(body.count('class="shift"'), 12)
-        self.assertIn("calendar.google.com/calendar/render?action=TEMPLATE", body)
+        # Per-session add-to-calendar was dropped from the page (Zep); the
+        # full feed stays linked.
+        self.assertNotIn("calendar.google.com/calendar/render", body)
+        self.assertIn('href="/agenda.ics"', body)
+        self.assertIn('href="/admin/login"', body)  # LOG IN in the nav
         self.assertIn('rel="icon" type="image/svg+xml" href="data:image/svg+xml,', body)
         self.assertNotIn("\u2014", body)  # no em dashes in copy
 

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ cfg.HUB_NAME }} | {{ cfg.EVENT_NAME }}{% endblock %}</title>
+<meta name="description" content="{{ cfg.MISSION }}">
+<link rel="icon" type="image/svg+xml" href="{{ favicon }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+{# Rodri's compiled stylesheet, verbatim (it @imports Inter Tight + IBM Plex Mono). #}
+<link rel="stylesheet" href="{{ url_for('static', filename='rodri/rodri.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='rodri/hub.css') }}">
+</head>
+<body class="rodri {% block body_class %}{% endblock %}">
+<div class="site-shell" id="top">
+<header class="topbar">
+  <a class="brand" href="{{ url_for('index') }}#top" aria-label="{{ cfg.HUB_NAME }} home"><img class="brand-logo" src="{{ url_for('static', filename='rodri/logo.svg') }}" alt="{{ cfg.HUB_NAME }}" width="599" height="196"></a>
+  {% block nav %}
+  <nav class="nav" aria-label="Main navigation">
+    <a href="{{ url_for('index') }}#program">Program</a>
+    <a href="{{ url_for('index') }}#get-involved">Get involved</a>
+    <a href="{{ url_for('index') }}#organizers">Organizers</a>
+    <a href="{{ url_for('index') }}#faq">FAQ</a>
+  </nav>
+  <div class="topbar-actions">
+    {% if user %}<a class="nav-login" href="{{ url_for('admin_shifts') }}">Admin</a>{% else %}<a class="nav-login" href="{{ url_for('login') }}"{% if request.endpoint == 'login' %} aria-current="page"{% endif %}>Log in</a>{% endif %}
+    <a class="nav-cta" href="{{ cfg.TELEGRAM_URL or (url_for('index') + '#get-involved') }}"{% if cfg.TELEGRAM_URL %} rel="noopener"{% endif %}>JOIN THE HUB <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg></a>
+  </div>
+  {% endblock %}
+</header>
+{% block body %}{% endblock %}
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>

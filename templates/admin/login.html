@@ -1,14 +1,24 @@
-{% extends "admin/layout.html" %}
-{% block page_title %}Log in{% endblock %}
-{% block content %}
-<div class="card login-card">
-  <h1>Log in</h1>
-  {% if error %}<ul class="errors"><li>{{ error }}</li></ul>{% endif %}
-  <form method="post">
-    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
-    <div class="field"><label for="username">Username</label><input id="username" type="text" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="64" required></div>
-    <div class="field"><label for="password">Password</label><input id="password" type="password" name="password" autocomplete="current-password" required></div>
-    <button class="btn btn-primary full" type="submit">Log in</button>
-  </form>
-</div>
+{% extends "public_base.html" %}
+{% block title %}Log in | {{ cfg.HUB_NAME }}{% endblock %}
+{% block body_class %}login{% endblock %}
+{% block body %}
+<main class="login-page">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="login-card">
+    <img class="login-shield" src="{{ url_for('static', filename='rodri/shield.svg') }}" alt="" width="148" height="176">
+    <div class="eyebrow"><span class="eyebrow-node"></span>ADMIN / HOSTS AND TEAM</div>
+    <h1>LOG IN</h1>
+    {% with msgs = get_flashed_messages(with_categories=true) %}{% if msgs %}
+    <ul class="login-flash" role="status">{% for cat, m in msgs %}<li class="{{ cat }}">{{ m }}</li>{% endfor %}</ul>
+    {% endif %}{% endwith %}
+    {% if error %}<ul class="errors login-errors" role="alert"><li>{{ error }}</li></ul>{% endif %}
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <div class="field"><label for="username">Username</label><input id="username" type="text" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="64" required></div>
+      <div class="field"><label for="password">Password</label><input id="password" type="password" name="password" autocomplete="current-password" required></div>
+      <button class="button button-primary" type="submit"><span>Log in</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg></button>
+    </form>
+    <p class="login-note">Shared logins for the hub team and shift hosts. <a href="{{ url_for('index') }}">Back to the public site</a></p>
+  </div>
+</main>
 {% endblock %}

@@ -7,3 +7,5 @@ __pycache__/
 .claude/
 server.log
 server.err.log
+# Rodri's original 17.7 MB hero video; commit only static/rodri/hero.mp4
+hero-background.mp4

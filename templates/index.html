@@ -1,137 +1,144 @@
-{% extends "base.html" %}
+{% extends "public_base.html" %}
 {% block body_class %}home{% endblock %}
 {% block body %}
+{% set arrow %}<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg>{% endset %}
+{% set city = cfg.EVENT_CITY.split(',')[0] %}
+{% set date_range = '%02d TO %02d %s' % (first.day, last.day, last.strftime('%b %Y')|upper) %}
 <main>
-<div class="keyart" aria-hidden="true">
-  <img src="{{ url_for('static', filename='img/devcon/key-art.jpg') }}"
-       srcset="{{ url_for('static', filename='img/devcon/key-art-1200.jpg') }} 1200w, {{ url_for('static', filename='img/devcon/key-art.jpg') }} 2400w"
-       sizes="100vw" alt="" width="2400" height="1350">
-</div>
-
-<section class="intro">
-  <div class="jaali" aria-hidden="true"></div>
-  <div class="wrap">
-    <div class="lockup">
-      {{ logo_svg|safe }}
-      <h1 class="wordmark"><b>Security</b> Hub</h1>
-      <p class="lockup-event">{{ cfg.EVENT_NAME }}</p>
+<section class="hero" aria-labelledby="hero-title">
+  <img class="hero-video hero-poster" src="{{ url_for('static', filename='rodri/hero-poster.jpg') }}" alt="" width="1280" height="720">
+  <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" poster="{{ url_for('static', filename='rodri/hero-poster.jpg') }}">
+    <source src="{{ url_for('static', filename='rodri/hero.mp4') }}" type="video/mp4">
+  </video>
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-content">
+    <div class="eyebrow"><span class="eyebrow-node"></span>DEVCON 8 &middot; {{ city|upper }} &middot; {{ last.year }}</div>
+    <h1 class="hero-title" id="hero-title"><span>SECURITY</span><span class="fuzzy-text">IS A PUBLIC</span><span class="fuzzy-text">GOOD.</span></h1>
+    <p class="hero-copy">{{ cfg.MISSION }}</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="#program"><span>Explore the program</span>{{ arrow }}</a>
+      <a class="button button-secondary" href="#get-involved"><span>Get involved</span>{{ arrow }}</a>
     </div>
-    <p class="when">{{ first.day }} to {{ last.day }} {{ last.strftime('%B %Y') }}</p>
-    <p class="where">{{ cfg.EVENT_VENUE }}, {{ cfg.EVENT_CITY }} <span class="sep" aria-hidden="true">/</span> <span class="tba">{{ cfg.HUB_LOCATION }}</span></p>
-    <p class="mission"><span aria-hidden="true">&#x1F6E1;&#xFE0F;</span> {{ cfg.MISSION }}</p>
-    <div class="actions">
-      {% if cfg.TELEGRAM_URL %}<a class="btn btn-primary" href="{{ cfg.TELEGRAM_URL }}" rel="noopener">Get involved</a>{% else %}<a class="btn btn-primary" href="#get-involved">Get involved</a>{% endif %}
+    <div class="hero-meta">
+      <div><span>DATE</span><strong>{{ date_range }}</strong></div>
+      <div><span>LOCATION</span><strong>{{ cfg.EVENT_VENUE|upper }} &middot; {{ city|upper }}</strong></div>
     </div>
   </div>
+  <div class="scroll-indicator" aria-hidden="true"><span>SCROLL TO DECRYPT</span><i></i></div>
 </section>
 
-<section class="photos" aria-label="Devcon community">
-  <div class="wrap">
-    <div class="photo-row">
-      <a class="zoom" href="{{ url_for('static', filename='img/devcon/photo-crowd.jpg') }}"><img src="{{ url_for('static', filename='img/devcon/photo-crowd.jpg') }}" alt="Attendees talking in a hallway at Devcon" loading="lazy" width="700" height="470"></a>
-      <a class="zoom" href="{{ url_for('static', filename='img/devcon/photo-map-full.jpg') }}"><img src="{{ url_for('static', filename='img/devcon/photo-map.jpg') }}" alt="A wall map covered in attendee photos linked by string" loading="lazy" width="900" height="600"></a>
-      <a class="zoom" href="{{ url_for('static', filename='img/devcon/photo-cowork.jpg') }}"><img src="{{ url_for('static', filename='img/devcon/photo-cowork.jpg') }}" alt="The Devcon co-working floor lit in purple" loading="lazy" width="700" height="470"></a>
+<div class="circuit-divider" aria-hidden="true"><span>NODE_01 / PROGRAM</span><i></i><b></b><i></i></div>
+
+<section class="program section" id="program" aria-labelledby="program-title">
+  <div class="section-heading">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-node"></span>PROGRAM / {{ cfg.HUB_OPEN_MIN|hhmm }} TO {{ cfg.HUB_CLOSE_MIN|hhmm }} IST</div>
+      <h2 class="display-title" id="program-title">FOUR DAYS.<br>ONE MISSION.</h2>
     </div>
+    <p>A working space for the people protecting Ethereum: researchers, auditors, builders, responders and everyone ready to learn.<a class="calendar-link" href="{{ url_for('agenda_ics') }}"><span>Subscribe to the calendar</span>{{ arrow }}</a></p>
   </div>
-</section>
 
-<section class="programme" id="program">
-  <div class="wrap">
-    <div class="programme-head">
-      <div>
-        <p class="eyebrow">Program</p>
-        <h2>Four days at the hub</h2>
-        <p class="sub">{{ cfg.HUB_OPEN_MIN|hhmm }} to {{ cfg.HUB_CLOSE_MIN|hhmm }} daily. All times IST. <a href="{{ url_for('agenda_ics') }}">Subscribe to the calendar</a></p>
-      </div>
-      <img class="track-art" src="{{ url_for('static', filename='img/devcon/security-track.png') }}" alt="" width="320" height="320">
-    </div>
-
-    <div class="tabs" role="tablist" aria-label="Hub days">
-      {% for d in days %}
-      <a class="tab" role="tab" id="tab-{{ d.n }}" href="?day={{ d.n }}#agenda" aria-controls="day-{{ d.n }}" aria-selected="{{ 'true' if d.n == active else 'false' }}" data-day="{{ d.n }}">
-        <span class="tab-day">{{ d.date.strftime('%a') }} {{ d.date.day }} Nov</span>
-        <span class="tab-n">Day {{ d.n }}</span>
-      </a>
-      {% endfor %}
-    </div>
-
+  <div class="day-tabs" role="tablist" aria-label="Program days" id="agenda">
     {% for d in days %}
-    <div class="day" id="day-{{ d.n }}" role="tabpanel" aria-labelledby="tab-{{ d.n }}" {% if d.n != active %}hidden{% endif %}>
-      <div class="day-head">
+    <a class="day-tab{% if d.n == active %} is-active{% endif %}" role="tab" id="tab-{{ d.n }}" href="?day={{ d.n }}#program" aria-controls="day-{{ d.n }}" aria-selected="{{ 'true' if d.n == active else 'false' }}" data-day="{{ d.n }}"><span>DAY_{{ '%02d' % d.n }}</span><strong>{{ '%02d' % d.date.day }} {{ d.date.strftime('%b')|upper }}</strong><i></i></a>
+    {% endfor %}
+  </div>
+
+  {% for d in days %}
+  {% set day_demo = d.shifts|map(attribute='sessions')|sum(start=[])|selectattr('is_demo')|list %}
+  <div class="schedule" id="day-{{ d.n }}" role="tabpanel" aria-labelledby="tab-{{ d.n }}"{% if d.n != active %} hidden{% endif %}>
+    <div class="schedule-intro">
+      <span class="schedule-number">{{ '%02d' % d.n }}</span>
+      <div>
+        <span>{{ d.date.strftime('%a') }} {{ d.date.day }} {{ d.date.strftime('%b') }}{% if day_demo %} &middot; Sessions marked demo{% endif %}</span>
         <h3>{{ d.theme }}</h3>
         <p>{{ d.blurb }}</p>
-        {% if has_demo %}<p class="demo-note">Sessions marked demo are placeholders until the program is confirmed.</p>{% endif %}
       </div>
+    </div>
+    <div class="session-list">
+      {% set ns = namespace(i=0) %}
       {% for blk in d.shifts %}{% set s = blk.shift %}
-      <article class="shift" aria-label="Shift {{ s.start_min|hhmm }} to {{ s.end_min|hhmm }}">
-        <header class="shift-head">
-          <h4 class="shift-time">{{ s.start_min|hhmm }} to {{ s.end_min|hhmm }}</h4>
-          <span class="host">Host: <strong>{{ s.host_name or 'to be announced' }}</strong></span>
-        </header>
-        {% if blk.sessions %}
-        <ol class="sessions">
-          {% for x in blk.sessions %}
-          <li class="session">
-            <p class="s-time">{{ x.start_min|hhmm }}<span>{{ x.end_min|hhmm }}</span></p>
-            <div class="s-body">
-              <h5 class="s-title">{{ x.title }}</h5>
-              <p class="s-meta"><span class="s-type">{{ x.type }}</span>{% if x.speakers %}<span>{{ x.speakers }}</span>{% endif %}{% if x.is_demo %}<span class="s-demo">Demo</span>{% endif %}</p>
-              {% if x.description %}<p class="s-desc">{{ x.description }}</p>{% endif %}
-              <p class="cal"><a href="{{ gcal_link(x) }}" target="_blank" rel="noopener">Add to Google Calendar</a></p>
-            </div>
-          </li>
-          {% endfor %}
-        </ol>
+      <div class="shift" role="group" aria-label="Shift {{ s.start_min|hhmm }} to {{ s.end_min|hhmm }}">
+        <div class="shift-head"><span class="shift-time">{{ s.start_min|hhmm }} to {{ s.end_min|hhmm }}</span><span class="host">Host: <strong>{{ s.host_name or 'to be announced' }}</strong></span></div>
+        {% for x in blk.sessions %}{% set ns.i = ns.i + 1 %}
+        <article class="session">
+          <div class="session-index">{{ '%02d' % ns.i }}</div>
+          <div class="session-time">{{ x.start_min|hhmm }} to {{ x.end_min|hhmm }}</div>
+          <div class="session-main">
+            <div class="session-tags"><span>{{ x.type }}</span>{% if x.speakers %}<span>{{ x.speakers }}</span>{% endif %}{% if x.is_demo %}<span class="is-demo">Demo</span>{% endif %}</div>
+            <h3>{{ x.title }}</h3>
+            {% if x.description %}<p>{{ x.description }}</p>{% endif %}
+          </div>
+        </article>
         {% else %}
-        <p class="empty">Open time. The program for this shift is still taking shape.</p>
-        {% endif %}
-      </article>
+        <p class="shift-empty">Open time. The program for this shift is still taking shape.</p>
+        {% endfor %}
+      </div>
       {% endfor %}
     </div>
+  </div>
+  {% endfor %}
+</section>
+
+<div class="circuit-divider" aria-hidden="true"><span>NODE_02 / CONTRIBUTE</span><i></i><b></b><i></i></div>
+
+<section class="involved section" id="get-involved" aria-labelledby="involved-title">
+  <div class="involved-art" aria-hidden="true"><img src="{{ url_for('static', filename='rodri/protocol-city.jpg') }}" alt="" width="1916" height="821" loading="lazy"></div>
+  <div class="involved-content">
+    <div class="eyebrow"><span class="eyebrow-node"></span>OPEN CHANNEL / GET INVOLVED</div>
+    <h2 class="display-title" id="involved-title">SPEAK. HOST.<br><span class="fuzzy-text">VOLUNTEER.</span></h2>
+    <p>Want to give a talk or run a workshop? Tell us what you have in mind. We&rsquo;ll need help with session support, speaker coordination, welcoming visitors, and keeping the space running smoothly.</p>
+    <a class="button button-primary" href="https://t.me/anamarija09" target="_blank" rel="noopener"><span>Propose a talk</span>{{ arrow }}</a>
+  </div>
+</section>
+
+<section class="organizers section" id="organizers" aria-labelledby="organizers-title">
+  <div class="section-heading compact">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-node"></span>TRUSTED NETWORK</div>
+      <h2 class="display-title" id="organizers-title">ORGANIZERS</h2>
+    </div>
+    <p>Independent teams securing the future of Ethereum.</p>
+  </div>
+  <div class="organizer-grid">
+    {% for name, url, logo in cfg.ORGANIZERS %}
+    <a class="organizer-card" href="{{ url }}" target="_blank" rel="noopener"><span class="organizer-index">{{ '%02d' % loop.index }}</span><img src="{{ url_for('static', filename='img/orgs/' + logo) }}" alt="{{ name }} logo" width="112" height="112" loading="lazy"><strong>{{ name }}</strong>{{ arrow }}</a>
     {% endfor %}
   </div>
 </section>
 
-<section class="involved" id="get-involved">
-  <div class="wrap">
-    <p class="eyebrow">Get involved</p>
-    <h2>Speak, host or volunteer</h2>
-    <p>Want to give a talk or run a workshop? Tell us what you have in mind.</p>
-    <p>We&rsquo;ll need help with session support, speaker coordination, welcoming visitors, and keeping the space running smoothly.</p>
-    <div class="actions">
-      <a class="btn btn-primary" href="https://t.me/anamarija09" rel="noopener">Propose a talk</a>
-    </div>
-  </div>
-</section>
+<div class="circuit-divider" aria-hidden="true"><span>NODE_03 / KNOWLEDGE BASE</span><i></i><b></b><i></i></div>
 
-<section class="people" id="organizers">
-  <div class="wrap">
-    <p class="eyebrow">Organizers</p>
-    <ul class="org-list">
-      {% for name, url, logo in cfg.ORGANIZERS %}
-      <li><a href="{{ url }}" rel="noopener"><img class="org-photo org-logo" src="{{ url_for('static', filename='img/orgs/' + logo) }}" alt="{{ name }} logo" width="112" height="112" loading="lazy"><b>{{ name }}</b></a></li>
-      {% endfor %}
-    </ul>
-    <p class="join">One of the <a href="{{ cfg.HUBS_ANNOUNCEMENT_URL }}" rel="noopener">Devcon 8 India Community Hubs</a>.</p>
+<section class="faq section" id="faq" aria-labelledby="faq-title">
+  <div class="faq-heading">
+    <div class="eyebrow"><span class="eyebrow-node"></span>KNOWLEDGE BASE / FAQ</div>
+    <h2 class="display-title" id="faq-title">QUESTIONS,<br><span class="fuzzy-text">DECRYPTED.</span></h2>
+    <p>Everything you need before entering the Security Hub.</p>
+  </div>
+  {% set faqs = [
+    ("Do I need to be a security expert to attend?", "No. Security Hub is open to experts, builders, students, funders, and anyone curious about Ethereum security."),
+    ("Will there be beginner-friendly sessions?", "Yes. Some sessions will be technical, but we are also planning beginner-friendly talks, Q&amp;A sessions, and open conversations."),
+    ("Do I need a Devcon ticket?", "Yes, the hub is inside the Devcon venue and a part of the main conference activities, so you need the ticket to get in."),
+    ("Can I propose a talk or workshop?", 'Yes, if you want to propose something contact <a href="https://t.me/anamarija09" rel="noopener">@anamarija09</a> on TG.'),
+    ("Can I volunteer?", "Yes. We&rsquo;ll need help with session support, speaker coordination, welcoming visitors, and keeping the space running smoothly."),
+    ("Where is the hub located?", "Location inside Devcon coming soon."),
+    ("When is the hub open?", "Security Hub will run during Devcon. Full hours coming soon."),
+  ] %}
+  <div class="faq-list">
+    {% for q, a in faqs %}
+    <details class="faq-item"><summary><span>{{ '%02d' % loop.index }}</span><strong>{{ q }}</strong><i></i></summary><p>{{ a|safe }}</p></details>
+    {% endfor %}
   </div>
 </section>
-
-<section class="faq" id="faq">
-  <div class="wrap">
-    <p class="eyebrow">FAQ</p>
-    <h2>Questions</h2>
-    <div class="faq-list">
-      <details class="faq-item"><summary>Do I need to be a security expert to attend?</summary><p>No. Security Hub is open to experts, builders, students, funders, and anyone curious about Ethereum security.</p></details>
-      <details class="faq-item"><summary>Will there be beginner-friendly sessions?</summary><p>Yes. Some sessions will be technical, but we are also planning beginner-friendly talks, Q&amp;A sessions, and open conversations.</p></details>
-      <details class="faq-item"><summary>Do I need a Devcon ticket?</summary><p>Yes, the hub is inside the Devcon venue and a part of the main conference activities, so you need the ticket to get in.</p></details>
-      <details class="faq-item"><summary>Can I propose a talk or workshop?</summary><p>Yes, if you want to propose something contact <a href="https://t.me/anamarija09" rel="noopener">@anamarija09</a> on TG.</p></details>
-      <details class="faq-item"><summary>Can I volunteer?</summary><p>Yes. We&rsquo;ll need help with session support, speaker coordination, welcoming visitors, and keeping the space running smoothly.</p></details>
-      <details class="faq-item"><summary>Where is the hub located?</summary><p>Location inside Devcon coming soon.</p></details>
-      <details class="faq-item"><summary>When is the hub open?</summary><p>Security Hub will run during Devcon. Full hours coming soon.</p></details>
-    </div>
-  </div>
-</section>
-<div class="moon-band" aria-hidden="true"></div>
 </main>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <a class="brand" href="#top" aria-label="{{ cfg.HUB_NAME }} home"><img class="brand-logo" src="{{ url_for('static', filename='rodri/logo.svg') }}" alt="{{ cfg.HUB_NAME }}" width="599" height="196" loading="lazy"></a>
+    <p>Security is not a feature. It is the foundation.</p>
+  </div>
+  <div class="footer-meta"><span>{{ cfg.EVENT_NAME|upper }}</span><span>{{ date_range }}</span><span>{{ city|upper }} / IN</span></div>
+  <p>Organized by <a href="{{ cfg.ORGANIZED_BY[1] }}" target="_blank" rel="noopener">{{ cfg.ORGANIZED_BY[0] }}</a>. One of the <a href="{{ cfg.HUBS_ANNOUNCEMENT_URL }}" target="_blank" rel="noopener">Devcon 8 India Community Hubs</a>.</p>
+</footer>
 {% endblock %}
-{% block scripts %}<script src="{{ url_for('static', filename='agenda.js') }}"></script><script src="{{ url_for('static', filename='lightbox.js') }}"></script>{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='rodri/hub.js') }}"></script>{% endblock %}

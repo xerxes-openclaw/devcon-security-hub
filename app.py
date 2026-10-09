@@ -1,7 +1,7 @@
 """Devcon 8 India: Security Hub. Public agenda + admin scheduling.
 
-Public: hero, four-day agenda (host shifts with sessions inside), add-to-
-calendar links per session, a full .ics feed.
+Public: hero, four-day agenda (host shifts with sessions inside), a full
+.ics feed. Page design by Rodri (templates/public_base.html, static/rodri/).
 Admin (username + password, shared logins, no personal accounts): the one
 "team" login edits everything; each of the 12 shift logins (tue3-shift1 ...
 fri6-shift3) manages sessions and the host name of its own shift only. A
@@ -10,6 +10,7 @@ matchmaking board lists open time and content waiting for a slot.
 import datetime as dt
 import hashlib
 import hmac
+import os
 import secrets
 import threading
 import time
@@ -62,7 +63,10 @@ LOGO_SVG = (
     '<path d="M612 345 640 358 640 377Z" fill="#7d64c0"/>'
     '<path d="M640 358 669 345 640 377Z" fill="#342a5f"/>'
     '</svg>')
-FAVICON_URI = "data:image/svg+xml," + urllib.parse.quote(LOGO_SVG)
+# Favicon: the shield from Rodri's logo (static/rodri/shield.svg).
+with open(os.path.join(app.static_folder, "rodri", "shield.svg"),
+          encoding="utf-8") as _f:
+    FAVICON_URI = "data:image/svg+xml," + urllib.parse.quote(_f.read().strip())
 
 
 # ------------------------------------------------------------ time helpers
