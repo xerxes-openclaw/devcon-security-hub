@@ -63,3 +63,18 @@
   .login-page{align-items:flex-start;padding:7rem 1rem 3rem}
   .login-card{padding:2rem 1.4rem 1.6rem}
 }
+
+/* Zep 2026-10-09: nav sits on the hero video and was hard to read.
+   Dark glass backing + brighter text for the links, login and CTA. */
+.nav, .nav-login, .nav-cta {
+  background: rgba(10, 7, 20, .62);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+}
+.nav { padding: .95rem 1.5rem; }
+.nav a, .nav-login { color: #e4dcf2; }
+.nav-login { padding: .95rem 1.1rem; }
+.nav a:after, .nav-login:after { bottom: -.35rem; }
+.topbar-actions { gap: .75rem; }
+.nav-cta { background: rgba(10, 7, 20, .62); border-color: var(--line-bright); }
