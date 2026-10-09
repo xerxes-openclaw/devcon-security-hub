@@ -87,3 +87,6 @@
 @media (max-width: 640px) {
   .organizer-logo { width: 6.5rem; height: 6.5rem; }
 }
+
+/* Zep 2026-10-09: FAQ as a small title above the FAQ headline. */
+.faq-heading .faq-kicker { font: 600 1.05rem/1.2 var(--mono); font-weight: 600; letter-spacing: 0.22em; margin-bottom: 1.4rem; }
