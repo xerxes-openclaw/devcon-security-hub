@@ -102,10 +102,8 @@
 }
 
 /* Footer (Zep 2026-10-09: simple and clean). One hairline-topped row:
-   shield mark + hub name on the left, back to top on the right. */
+   shield mark + hub name. Back to top removed (Zep 2026-10-10). */
 .footer{display:flex;min-height:0;align-items:center;justify-content:space-between;gap:1.5rem;padding:1.75rem 0 2.25rem;color:var(--muted);font:500 .68rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
 .footer .footer-id{display:flex;align-items:center;gap:.9rem;margin:0;color:inherit;font:inherit}
 .footer-id img{flex:none;width:1.05rem;height:auto}
 .footer-id span+span{padding-left:.9rem;border-left:1px solid var(--line)}
-.footer-top{color:var(--muted);transition:color .18s}
-.footer-top:hover,.footer-top:focus-visible{color:var(--magenta)}
