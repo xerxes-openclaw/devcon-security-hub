@@ -133,12 +133,8 @@
 </main>
 
 <footer class="footer">
-  <div class="footer-brand">
-    <a class="brand" href="#top" aria-label="{{ cfg.HUB_NAME }} home"><img class="brand-logo" src="{{ url_for('static', filename='rodri/logo.svg') }}" alt="{{ cfg.HUB_NAME }}" width="599" height="196" loading="lazy"></a>
-    <p>Security is not a feature. It is the foundation.</p>
-  </div>
-  <div class="footer-meta"><span>{{ cfg.EVENT_NAME|upper }}</span><span>{{ date_range }}</span><span>{{ city|upper }} / IN</span></div>
-  <p>Organized by <a href="{{ cfg.ORGANIZED_BY[1] }}" target="_blank" rel="noopener">{{ cfg.ORGANIZED_BY[0] }}</a>. One of the <a href="{{ cfg.HUBS_ANNOUNCEMENT_URL }}" target="_blank" rel="noopener">Devcon 8 India Community Hubs</a>.</p>
+  <p class="footer-id"><img src="{{ url_for('static', filename='rodri/shield.svg') }}" alt="" width="148" height="176" loading="lazy"><span>{{ cfg.HUB_NAME }}</span><span>Devcon 8</span></p>
+  <a class="footer-top" href="#top">Back to top</a>
 </footer>
 {% endblock %}
 {% block scripts %}<script src="{{ url_for('static', filename='rodri/hub.js') }}"></script>{% endblock %}
