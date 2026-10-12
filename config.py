@@ -124,3 +124,6 @@ ORGANIZED_BY = ("TheDAO Security Fund", "https://thedao.fund/")
 DISCLAIMER = ("Community-run hub. Not an official Devcon or Ethereum "
               "Foundation page.")
 VOLUNTEER_SIGNUPS_PER_HOUR_PER_IP = 5
+# Zep 2026-10-12: Anamarija schedules straight into Shifts; matchmaking hidden
+# (code kept, flip to True if she asks for a waiting list).
+MATCHMAKING_ENABLED = False

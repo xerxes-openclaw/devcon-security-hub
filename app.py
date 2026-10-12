@@ -723,6 +723,12 @@ def admin_login_reset(uid):
 
 # ------------------------------------------------------------ matchmaking
 
+@app.before_request
+def matchmaking_off():
+    if request.path.startswith("/admin/match") and not config.MATCHMAKING_ENABLED:
+        abort(404)
+
+
 @app.route("/admin/match")
 @login_required
 def admin_match():

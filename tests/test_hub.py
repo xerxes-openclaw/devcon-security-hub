@@ -21,6 +21,7 @@ import config  # noqa: E402
 import db  # noqa: E402
 
 PW = "correct-horse-battery"
+config.MATCHMAKING_ENABLED = True  # existing match tests; TestMatchmakingOff flips it
 
 
 def reset_db():
@@ -626,3 +627,14 @@ class TestVolunteers(HubTestCase):
     def test_public_page_has_form_and_thanks(self):
         self.assertIn(b'id="volunteer"', self.c.get("/").data)
         self.assertIn(b"on the list", self.c.get("/?joined=1").data)
+
+
+class TestMatchmakingOff(HubTestCase):
+    def tearDown(self):
+        config.MATCHMAKING_ENABLED = True
+
+    def test_hidden_and_404_when_off(self):
+        config.MATCHMAKING_ENABLED = False
+        self.login("team")
+        self.assertEqual(self.c.get("/admin/match").status_code, 404)
+        self.assertNotIn(b"Matchmaking", self.c.get("/admin/shifts").data)
