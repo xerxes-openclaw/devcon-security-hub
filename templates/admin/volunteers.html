@@ -1,0 +1,18 @@
+{% extends "admin/layout.html" %}
+{% block page_title %}Volunteers{% endblock %}
+{% block content %}
+<h1>Volunteers</h1>
+<p class="lead">Sign-ups from the volunteer form on the public page, newest first.</p>
+<div class="card table-scroll">
+  <table class="list">
+    <thead><tr><th>Name</th><th>Contact</th><th>Days</th><th>Note</th><th>Signed up</th></tr></thead>
+    <tbody>
+    {% for v in rows %}
+    <tr><td>{{ v.name }}</td><td>{{ v.contact }}</td><td>{{ v.day_names }}{% if not v.day_names %}<span class="muted">not set</span>{% endif %}</td><td>{{ v.note }}</td><td>{{ v.when }}</td></tr>
+    {% else %}
+    <tr><td colspan="5" class="muted">No sign-ups yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -54,6 +54,14 @@ CREATE TABLE IF NOT EXISTS backlog(
   created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
   created_at INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS volunteers(
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  contact TEXT NOT NULL,
+  days TEXT NOT NULL DEFAULT '',
+  note TEXT NOT NULL DEFAULT '',
+  created_at INTEGER NOT NULL
+);
 """
 # users holds shared logins, not people: one 'team' login (global admin) and
 # one 'shift' login per host shift, linked to that shift by shift_id.
@@ -323,3 +331,17 @@ def place_backlog(bid, session_id):
 def delete_backlog(bid):
     with connect() as con:
         con.execute("DELETE FROM backlog WHERE id=?", (bid,))
+
+
+# -------------------------------------------------------------- volunteers
+
+def create_volunteer(name, contact, days, note):
+    with connect() as con:
+        con.execute("INSERT INTO volunteers(name,contact,days,note,created_at) "
+                    "VALUES(?,?,?,?,?)", (name, contact, days, note, now()))
+
+
+def volunteers():
+    with connect() as con:
+        return con.execute(
+            "SELECT * FROM volunteers ORDER BY created_at DESC").fetchall()

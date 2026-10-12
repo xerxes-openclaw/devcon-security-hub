@@ -123,3 +123,4 @@ ORGANIZERS = [
 ORGANIZED_BY = ("TheDAO Security Fund", "https://thedao.fund/")
 DISCLAIMER = ("Community-run hub. Not an official Devcon or Ethereum "
               "Foundation page.")
+VOLUNTEER_SIGNUPS_PER_HOUR_PER_IP = 5

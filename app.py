@@ -413,7 +413,41 @@ def index():
     first, last = day_date(1), day_date(max(config.DAYS))
     return render_template("index.html", days=days, active=active,
                            has_demo=has_demo, gcal_link=gcal_link,
-                           first=first, last=last)
+                           first=first, last=last, day_date=day_date,
+                           joined=request.args.get("joined") == "1")
+
+
+@app.route("/volunteer", methods=["POST"])
+def volunteer():
+    """Volunteer sign-up from the public page (Zep 2026-10-12). The website
+    field is a honeypot: bots fill it, people never see it."""
+    back = url_for("index", _anchor="volunteer")
+    f = request.form
+    if f.get("website"):
+        return redirect(url_for("index", joined=1, _anchor="volunteer"))
+    if not rate_limit("vol:" + (request.remote_addr or "?"),
+                      config.VOLUNTEER_SIGNUPS_PER_HOUR_PER_IP, 3600):
+        abort(429, "Too many sign-ups from here. Try again later.")
+    name = f.get("name", "").strip()[:120]
+    contact = f.get("contact", "").strip()[:160]
+    days = ",".join(str(d) for d in sorted(config.DAYS)
+                    if str(d) in f.getlist("days"))
+    note = f.get("note", "").strip()[:1000]
+    if not name or not contact:
+        return redirect(back)
+    db.create_volunteer(name, contact, days, note)
+    return redirect(url_for("index", joined=1, _anchor="volunteer"))
+
+
+@app.route("/admin/volunteers")
+@admin_required
+def admin_volunteers():
+    rows = [dict(v, when=dt.datetime.fromtimestamp(v["created_at"], config.TZ)
+                 .strftime("%d %b %H:%M IST"),
+                 day_names=", ".join(day_date(int(n)).strftime("%a %d")
+                                     for n in v["days"].split(",") if n))
+            for v in db.volunteers()]
+    return render_template("admin/volunteers.html", rows=rows)
 
 
 @app.route("/agenda.ics")

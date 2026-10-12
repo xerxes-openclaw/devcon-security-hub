@@ -95,6 +95,29 @@
   </div>
 </section>
 
+<section class="volunteer section" id="volunteer" aria-labelledby="volunteer-title">
+  <div class="volunteer-copy">
+    <div class="eyebrow"><span class="eyebrow-node"></span>03 / VOLUNTEER</div>
+    <h2 class="display-title" id="volunteer-title">VOLUNTEER</h2>
+    <p>Help run the day, from registration to the stage. Join the crew behind the event.</p>
+  </div>
+  {% if joined %}
+  <p class="volunteer-thanks" role="status">You&rsquo;re on the list. We&rsquo;ll reach out before the event.</p>
+  {% else %}
+  <form class="login-form volunteer-form" method="post" action="{{ url_for('volunteer') }}">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <label class="volunteer-hp" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+    <label><span>NAME</span><input type="text" name="name" maxlength="120" autocomplete="name" required></label>
+    <label><span>TELEGRAM OR EMAIL</span><input type="text" name="contact" maxlength="160" placeholder="@handle or you@example.com" autocapitalize="none" spellcheck="false" required></label>
+    <fieldset class="volunteer-days"><legend>DAYS YOU CAN HELP</legend>
+      {% for n in cfg.DAYS %}<label><input type="checkbox" name="days" value="{{ n }}"><span>{{ day_date(n).strftime('%a %d %b') }}</span></label>{% endfor %}
+    </fieldset>
+    <label><span>ANYTHING ELSE (OPTIONAL)</span><input type="text" name="note" maxlength="1000"></label>
+    <button class="button button-primary login-submit" type="submit">{{ chip }}<span class="button-label">Join the crew</span>{{ arrow }}</button>
+  </form>
+  {% endif %}
+</section>
+
 <section class="organizers section" id="organizers" aria-labelledby="organizers-title">
   <div class="section-heading compact">
     <div>

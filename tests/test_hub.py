@@ -25,7 +25,7 @@ PW = "correct-horse-battery"
 
 def reset_db():
     with db.connect() as con:
-        for t in ("backlog", "sessions", "shifts", "users"):
+        for t in ("backlog", "sessions", "shifts", "users", "volunteers"):
             con.execute("DELETE FROM %s" % t)
     db.init()  # lays out the default 3 shifts per day again
 
@@ -594,3 +594,35 @@ class TestMigration(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestVolunteers(HubTestCase):
+    def post_vol(self, **data):
+        tok = self.csrf()
+        return self.c.post("/volunteer", data={"_csrf": tok, **data})
+
+    def test_signup_saved_and_listed_for_team_only(self):
+        r = self.post_vol(name="Asha", contact="@asha", days=["1", "3", "9"], note="stage")
+        self.assertEqual(r.status_code, 302)
+        self.assertIn("joined=1", r.headers["Location"])
+        rows = db.volunteers()
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["days"], "1,3")  # unknown day 9 dropped
+        self.login("tue3-shift1")
+        self.assertEqual(self.c.get("/admin/volunteers").status_code, 403)
+        self.login("team")
+        self.assertIn(b"@asha", self.c.get("/admin/volunteers").data)
+
+    def test_missing_fields_and_honeypot_save_nothing(self):
+        self.post_vol(name="", contact="@x")
+        self.post_vol(name="Bot", contact="@bot", website="spam.example")
+        self.assertEqual(len(db.volunteers()), 0)
+
+    def test_rate_limited(self):
+        for _ in range(config.VOLUNTEER_SIGNUPS_PER_HOUR_PER_IP):
+            self.post_vol(name="A", contact="@a")
+        self.assertEqual(self.post_vol(name="A", contact="@a").status_code, 429)
+
+    def test_public_page_has_form_and_thanks(self):
+        self.assertIn(b'id="volunteer"', self.c.get("/").data)
+        self.assertIn(b"on the list", self.c.get("/?joined=1").data)
