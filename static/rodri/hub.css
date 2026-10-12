@@ -107,3 +107,15 @@
 .footer .footer-id{display:flex;align-items:center;gap:.9rem;margin:0;color:inherit;font:inherit}
 .footer-id img{flex:none;width:1.05rem;height:auto}
 .footer-id span+span{padding-left:.9rem;border-left:1px solid var(--line)}
+
+/* Zep 2026-10-12: on phones the hooded ETH figure was lost: the hero is very tall
+   on a phone, so "cover" zoomed the video ~4x and the title sat on the face.
+   Phone: the video fills only the top band, framed on the figure (~74% across),
+   and the text starts below the face. */
+@media (max-width: 46rem) {
+  .hero { padding-top: 22rem; }
+  .hero-video { height: 30rem; bottom: auto; object-position: 74% center; opacity: 0.95; }
+  .hero::before {
+    background: linear-gradient(0deg, var(--ink) 0%, var(--ink) calc(100% - 30rem), rgba(8, 5, 15, 0.55) calc(100% - 22rem), rgba(8, 5, 15, 0.05) calc(100% - 13rem));
+  }
+}
