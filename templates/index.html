@@ -41,7 +41,13 @@
     <div>
       <h2 class="display-title" id="program-title">FOUR DAYS.<br>ONE MISSION.</h2>
     </div>
-    <p>A working space for the people protecting Ethereum: researchers, auditors, builders, responders and everyone ready to learn.<a class="calendar-link" href="{{ url_for('agenda_ics') }}"><span>Subscribe to the calendar</span>{{ arrow }}</a><span class="program-timezone">All times in IST (UTC+5:30)</span></p>
+    <div class="program-intro">
+      <p>A working space for the people protecting Ethereum: researchers, auditors, builders, responders and everyone ready to learn.</p>
+      <div class="program-cta">
+        <a class="button button-secondary calendar-button" href="{{ url_for('agenda_ics') }}">{{ chip }}<span class="button-label">Subscribe to the calendar</span>{{ arrow }}</a>
+        <span class="program-timezone">All times in IST (UTC+5:30)</span>
+      </div>
+    </div>
   </div>
 
   <div class="day-tabs" role="tablist" aria-label="Program days" id="agenda">
@@ -117,9 +123,11 @@
     <label><span>NAME</span><input type="text" name="name" maxlength="120" autocomplete="name" required></label>
     <label><span>TELEGRAM OR EMAIL</span><input type="text" name="contact" maxlength="160" placeholder="@handle or you@example.com" autocapitalize="none" spellcheck="false" required></label>
     <fieldset class="volunteer-days"><legend>DAYS YOU CAN HELP</legend>
-      {% for n in cfg.DAYS %}<label><input type="checkbox" name="days" value="{{ n }}"><span>{{ day_date(n).strftime('%a %d %b') }}</span></label>{% endfor %}
+      <div class="volunteer-day-grid">
+      {% for n in cfg.DAYS %}<label class="day-tile"><input type="checkbox" name="days" value="{{ n }}"><span><strong>{{ day_date(n).strftime('%A') }}</strong><small>{{ day_date(n).strftime('%d %b') }}</small></span></label>{% endfor %}
+      </div>
     </fieldset>
-    <label><span>ANYTHING ELSE (OPTIONAL)</span><input type="text" name="note" maxlength="1000"></label>
+    <label><span>ANYTHING ELSE (OPTIONAL)</span><textarea name="note" maxlength="1000" rows="4"></textarea></label>
     <button class="button button-primary login-submit" type="submit">{{ chip }}<span class="button-label">Join the crew</span>{{ arrow }}</button>
   </form>
   {% endif %}

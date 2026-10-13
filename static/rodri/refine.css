@@ -1,0 +1,201 @@
+/* Rodri 2026-10-13 refinements, loaded after palette.css.
+   1 glass date/location cards + pink spark border on hover
+   2 volunteer form: 2x2 day tiles, textarea, spacing
+   3 tighter hero -> program gap
+   4 program intro: wider, further left, calendar as secondary button
+   5 hero heading tracking
+   6 lighter hero overlay */
+
+/* Variable Inter Tight so weight 650 renders as 650 (rodri.css loads static 400-800). */
+@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&display=swap");
+
+@property --hub-spark {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+:root { --spark: #e05cc7; --spark-soft: #ffc9f1; }
+
+/* 5. Hero heading: characters no longer touch. */
+.palette .hero-title {
+  font-weight: 650;
+  letter-spacing: -0.012em;
+  line-height: 1.1;
+}
+
+/* 6. Lighter ivory veil: text side keeps a soft wash, the video shows through. */
+.palette .hero::before {
+  background:
+    linear-gradient(90deg, rgba(247, 243, 235, .74) 0%, rgba(247, 243, 235, .56) 28%, rgba(247, 243, 235, .26) 46%, rgba(247, 243, 235, 0) 64%),
+    linear-gradient(0deg, var(--ivory), transparent 16%);
+}
+
+/* 3. Hero -> program spacing. Video anchored near the top so the hood is never cut. */
+.palette .hero { min-height: 42rem; padding-bottom: 3rem; }
+.palette .hero-image { object-position: 65% 12%; }
+.palette .program.section { padding-top: 3rem; }
+
+/* 1. Date / location: frosted glass, deep purple labels, spark on hover. */
+.palette .hero-meta-card {
+  isolation: isolate;
+  background: rgba(255, 255, 255, .56);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  backdrop-filter: blur(18px) saturate(1.15);
+  border: 1px solid rgba(98, 80, 160, .16);
+  box-shadow: inset 0 1px rgba(255, 255, 255, .75), 0 .75rem 2rem rgba(30, 27, 46, .06);
+}
+.palette .hero-meta-card:hover {
+  background: rgba(255, 255, 255, .66);
+  border-color: rgba(224, 92, 199, .22);
+  box-shadow: inset 0 1px rgba(255, 255, 255, .75), 0 .75rem 2rem rgba(30, 27, 46, .06), 0 0 1.4rem rgba(224, 92, 199, .16);
+}
+.palette .hero-meta-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  padding: 2px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(from var(--hub-spark),
+    transparent 0deg 200deg,
+    rgba(224, 92, 199, .2) 250deg,
+    var(--spark) 320deg,
+    var(--spark-soft) 345deg,
+    var(--spark) 352deg,
+    transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+.palette .hero-meta-card:hover::after {
+  opacity: 1;
+  animation: hubSpark 2.6s linear infinite;
+}
+@keyframes hubSpark { to { --hub-spark: 360deg; } }
+.palette .hero-meta-copy span {
+  color: #4e3f86;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .palette .hero-meta-card::after, .palette .hero-meta-card:hover::after { display: none; animation: none; }
+  .palette .hero-meta-card:hover { border-color: rgba(224, 92, 199, .55); }
+}
+
+/* 4. Program intro: wider column further left, calendar as secondary button. */
+.palette .section-heading {
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: 4rem;
+}
+.palette .program-intro { max-width: 40rem; }
+.palette .program-intro p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+.palette .program-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .7rem;
+  margin-top: 1.6rem;
+}
+.palette .calendar-button {
+  min-height: 2.9rem;
+  padding: 0 1.15rem;
+  gap: 1rem;
+  font-size: .88rem;
+}
+.palette .program-timezone { margin: 0; font-size: .8rem; }
+
+/* 2. Volunteer form: steadier rhythm, 2x2 day tiles, multiline note. */
+.palette .volunteer { gap: 4rem; }
+.palette .volunteer-form { gap: 1.4rem; }
+.palette .login-form label > span,
+.palette .volunteer-days legend { margin-bottom: .1rem; }
+.palette .login-form input:not([type="checkbox"]) { min-height: 3.25rem; }
+.palette .volunteer-days { display: block; min-width: 0; margin: 0; padding: 0; }
+.palette .volunteer-days legend { padding: 0; margin-bottom: .65rem; }
+.palette .volunteer-day-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+}
+.palette .login-form .volunteer-days label.day-tile {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  min-height: 4.25rem;
+  padding: .85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--warm);
+  color: var(--text);
+  font: 500 .95rem/1.2 var(--body);
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+.palette .login-form .volunteer-days .day-tile input {
+  flex: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  min-height: 1.2rem;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--violet);
+  cursor: pointer;
+}
+.palette .login-form .day-tile > span { display: flex; flex-direction: column; gap: .25rem; min-width: 0; margin: 0; color: var(--text); font: inherit; letter-spacing: 0; }
+.palette .day-tile strong { font-weight: 600; font-size: .95rem; }
+.palette .day-tile small { color: var(--muted); font-size: .8rem; }
+.palette .login-form .volunteer-days label.day-tile:hover {
+  border-color: var(--line-bright);
+  background: var(--surface-high);
+}
+.palette .login-form .volunteer-days label.day-tile:has(:focus-visible) {
+  outline: 2px solid var(--sky);
+  outline-offset: 2px;
+}
+.palette .login-form .volunteer-days label.day-tile:has(:checked) {
+  border-color: var(--violet);
+  background: var(--lavender);
+  box-shadow: inset 0 0 0 1px var(--violet);
+}
+.palette .day-tile:has(:checked) strong { color: var(--violet-deep); }
+.palette .day-tile:has(:checked) small { color: var(--violet-deep); }
+.palette .login-form textarea {
+  display: block;
+  width: 100%;
+  min-height: 6.5rem;
+  padding: .85rem 1rem;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  outline: none;
+  color: var(--text);
+  background: var(--warm);
+  font: 500 .95rem/1.55 var(--body);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+.palette .login-form textarea:focus { border-color: var(--sky); box-shadow: 0 0 0 2px rgba(79, 120, 168, .18); }
+.palette .volunteer-form .login-submit { margin-top: .3rem; }
+
+@media (max-width: 46rem) {
+  .palette .hero { min-height: 0; padding-bottom: 2rem; }
+  .palette .hero-image { object-position: 74% center; }
+  .palette .hero-meta { width: 100%; }
+  .palette .hero::before {
+    background: linear-gradient(0deg, var(--ivory) 0%, var(--ivory) calc(100% - 30rem), rgba(247, 243, 235, .5) calc(100% - 22rem), rgba(247, 243, 235, 0) calc(100% - 14rem));
+  }
+  .palette .program.section { padding-top: 2.5rem; }
+  .palette .section-heading { grid-template-columns: 1fr; gap: 1.5rem; }
+  .palette .program-intro p { font-size: 1.05rem; }
+  .palette .volunteer { gap: 2rem; }
+  .palette .volunteer-day-grid { gap: .6rem; }
+  .palette .login-form .volunteer-days label.day-tile { padding: .8rem .85rem; gap: .7rem; }
+}
