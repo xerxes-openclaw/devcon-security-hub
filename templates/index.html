@@ -7,13 +7,13 @@
 {% set date_range = '%02d TO %02d %s' % (first.day, last.day, last.strftime('%b %Y')|upper) %}
 <main>
 <section class="hero" aria-labelledby="hero-title">
-  <img class="hero-video hero-poster" src="{{ url_for('static', filename='rodri/hero-poster.jpg') }}" alt="" width="1280" height="720">
-  <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" poster="{{ url_for('static', filename='rodri/hero-poster.jpg') }}">
-    <source src="{{ url_for('static', filename='rodri/hero.mp4') }}" type="video/mp4">
+  <img class="hero-video hero-image hero-poster" src="{{ url_for('static', filename='rodri/hero-garden.webp') }}" alt="" width="1672" height="941" fetchpriority="high" decoding="async" aria-hidden="true">
+  <video class="hero-video hero-image" autoplay muted loop playsinline preload="metadata" poster="{{ url_for('static', filename='rodri/hero-garden.webp') }}" aria-hidden="true">
+    <source src="{{ url_for('static', filename='rodri/hero-garden-motion-web.mp4') }}" type="video/mp4">
   </video>
   <div class="hero-grid" aria-hidden="true"></div>
   <div class="hero-content">
-    <h1 class="hero-title" id="hero-title"><span>SECURITY</span><span class="fuzzy-text">IS A PUBLIC</span><span class="fuzzy-text">GOOD.</span></h1>
+    <h1 class="hero-title" id="hero-title"><span>Security is </span><span>a public good.</span></h1>
     <p class="hero-copy">{{ cfg.MISSION }}</p>
     <div class="hero-actions">
       <a class="button button-primary" href="#program">{{ chip }}<span class="button-label">Explore the program</span>{{ arrow }}</a>
@@ -21,11 +21,11 @@
     </div>
     <div class="hero-meta">
       <div class="hero-meta-card">
-        <img class="hero-meta-art" src="{{ url_for('static', filename='rodri/date-crystal.webp') }}" alt="" width="400" height="400" aria-hidden="true">
+        <img class="hero-meta-art" src="{{ url_for('static', filename='rodri/date-calendar.svg') }}" alt="" width="64" height="64" aria-hidden="true">
         <div class="hero-meta-copy"><span>DATE</span><strong>{{ date_range }}</strong></div>
       </div>
       <div class="hero-meta-card">
-        <img class="hero-meta-art" src="{{ url_for('static', filename='rodri/location-pin.webp') }}" alt="" width="400" height="400" aria-hidden="true">
+        <img class="hero-meta-art" src="{{ url_for('static', filename='rodri/location-pin.svg') }}" alt="" width="64" height="64" aria-hidden="true">
         <div class="hero-meta-copy"><span>LOCATION</span><strong>{{ cfg.EVENT_VENUE|upper }} &middot; {{ city|upper }}</strong></div>
       </div>
     </div>
@@ -41,12 +41,12 @@
     <div>
       <h2 class="display-title" id="program-title">FOUR DAYS.<br>ONE MISSION.</h2>
     </div>
-    <p>A working space for the people protecting Ethereum: researchers, auditors, builders, responders and everyone ready to learn.<a class="calendar-link" href="{{ url_for('agenda_ics') }}"><span>Subscribe to the calendar</span>{{ arrow }}</a></p>
+    <p>A working space for the people protecting Ethereum: researchers, auditors, builders, responders and everyone ready to learn.<a class="calendar-link" href="{{ url_for('agenda_ics') }}"><span>Subscribe to the calendar</span>{{ arrow }}</a><span class="program-timezone">All times in IST (UTC+5:30)</span></p>
   </div>
 
   <div class="day-tabs" role="tablist" aria-label="Program days" id="agenda">
     {% for d in days %}
-    <a class="day-tab{% if d.n == active %} is-active{% endif %}" role="tab" id="tab-{{ d.n }}" href="?day={{ d.n }}#program" aria-controls="day-{{ d.n }}" aria-selected="{{ 'true' if d.n == active else 'false' }}" data-day="{{ d.n }}"><span>{{ d.date.strftime('%A') }}</span><strong>{{ d.date.day }} <small>{{ d.date.strftime('%b') }}</small></strong><i></i></a>
+    <a class="day-tab{% if d.n == active %} is-active{% endif %}" role="tab" id="tab-{{ d.n }}" href="?day={{ d.n }}#program" aria-controls="day-{{ d.n }}" aria-selected="{{ 'true' if d.n == active else 'false' }}" tabindex="{{ '0' if d.n == active else '-1' }}" data-day="{{ d.n }}"><span>{{ d.date.strftime('%A') }}</span><strong>{{ d.date.day }} <small>{{ d.date.strftime('%b') }}</small></strong><i></i></a>
     {% endfor %}
   </div>
 
@@ -83,13 +83,20 @@
   {% endfor %}
 </section>
 
-<div class="circuit-divider" aria-hidden="true"><span>NODE_02 / CONTRIBUTE</span><i></i><b></b><i></i></div>
+<figure class="community-band">
+  <img src="{{ url_for('static', filename='rodri/community-learning.webp') }}" alt="Ethereum builders sharing ideas and reviewing code with the Security Hub guardian." width="1672" height="941" loading="lazy" decoding="async">
+  <figcaption>Shared learning</figcaption>
+</figure>
 
 <section class="involved section" id="get-involved" aria-labelledby="involved-title">
-  <div class="involved-art" aria-hidden="true"><img src="{{ url_for('static', filename='rodri/protocol-city.jpg') }}" alt="" width="1916" height="821" loading="lazy"></div>
+  <div class="involved-art ethereum-art"><img src="{{ url_for('static', filename='rodri/ethereum-protected-v2.webp') }}" alt="A violet Ethereum crystal protected by a translucent pink and purple geometric force field, surrounded by delicate circuits on white." width="1254" height="1254" loading="lazy" decoding="async">
+    <video class="ethereum-video" autoplay muted loop playsinline preload="metadata" poster="{{ url_for('static', filename='rodri/ethereum-protected-v2.webp') }}" aria-hidden="true">
+      <source src="{{ url_for('static', filename='rodri/ethereum-protected-motion-web.mp4') }}" type="video/mp4">
+    </video>
+  </div>
   <div class="involved-content">
     <div class="eyebrow"><span class="eyebrow-node"></span>OPEN CHANNEL / GET INVOLVED</div>
-    <h2 class="display-title" id="involved-title">SPEAK. HOST.<br><span class="fuzzy-text">VOLUNTEER.</span></h2>
+    <h2 class="display-title" id="involved-title">SPEAK. HOST.<br><span class="text-accent">VOLUNTEER.</span></h2>
     <p>Want to give a talk or run a workshop? Tell us what you have in mind. We&rsquo;ll need help with session support, speaker coordination, welcoming visitors, and keeping the space running smoothly.</p>
     <a class="button button-primary" href="https://t.me/anamarija09" target="_blank" rel="noopener">{{ chip }}<span class="button-label">Propose a talk</span>{{ arrow }}</a>
   </div>
@@ -99,6 +106,7 @@
   <div class="volunteer-copy">
     <h2 class="display-title" id="volunteer-title">VOLUNTEER</h2>
     <p>Help run the day, from registration to the stage. Join the crew behind the event.</p>
+    <div class="volunteer-art"><img src="{{ url_for('static', filename='rodri/volunteer-team.webp') }}" alt="Volunteers and the Security Hub guardian working together to support the Ethereum community." width="1672" height="941" loading="lazy" decoding="async"></div>
   </div>
   {% if joined %}
   <p class="volunteer-thanks" role="status">You&rsquo;re on the list. We&rsquo;ll reach out before the event.</p>
@@ -135,7 +143,7 @@
 <section class="faq section" id="faq" aria-labelledby="faq-title">
   <div class="faq-heading">
     <div class="eyebrow faq-kicker">FAQ</div>
-    <h2 class="display-title" id="faq-title">QUESTIONS,<br><span class="fuzzy-text">DECRYPTED.</span></h2>
+    <h2 class="display-title" id="faq-title">QUESTIONS,<br><span class="text-accent">DECRYPTED.</span></h2>
   </div>
   {% set faqs = [
     ("Do I need to be a security expert to attend?", "No. Security Hub is open to experts, builders, students, funders, and anyone curious about Ethereum security."),

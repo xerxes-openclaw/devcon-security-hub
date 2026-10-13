@@ -1,0 +1,23 @@
+Continúa el diseño y la implementación del sitio Security Hub de Devcon 8 India. La referencia original es https://encoding-vault-mills-none.trycloudflare.com/. La versión actual está en el proyecto ethsecurity-hub y se ejecuta con .venv/bin/python app.py en http://127.0.0.1:4590.
+
+OBJETIVO
+Transformar la estética oscura de la referencia en una web profesional, luminosa, cercana y precisa. La idea central es «Security is a public good»: una comunidad abierta de investigadores, auditores, builders y equipos de respuesta que aprende y colabora para proteger Ethereum. Expresar seguridad, confianza y cooperación, con una presentación clara y humana.
+
+DIRECCIÓN VISUAL APROBADA
+Fondo marfil #F7F3EB; superficies blancas #FFFFFF; violeta principal #6250A0 y hover #4E3F86; lavanda #E6E0F5 y lavanda suave #F4F1FA; texto #1E1B2E; secundario #5B566B; salvia #647D68; azul #4F78A8 para enlaces; ámbar #B87932 para pequeños acentos. Titulares Inter Tight y texto/controles DM Sans. Eliminar efectos de texto, glitch, canvas, neón y circuitos animados. Botones sólidos, con mayúsculas y minúsculas naturales y radio de 10px; tarjetas de 16px y paneles de 22px. Espaciados generosos pero equilibrados, anchos alineados, bordes suaves y jerarquía tipográfica consistente.
+
+AGENDA: CONSERVAR EL DISEÑO ORIGINAL
+Mantener los cuatro días como una franja conectada, seguida de un panel con el tema y descripción del día a la izquierda y las sesiones a la derecha. Conservar bandas de turnos, rangos horarios, hosts, una columna destacada de hora inicial, hora final debajo, etiquetas de tipo/speaker y descripción. Adaptar los colores al tema claro; no convertirla en una colección de tarjetas independientes ni cambiar su lógica. En pantallas pequeñas, apilar introducción y sesiones y distribuir los días en dos columnas. Conservar selección de días, navegación por teclado, enlaces sin JavaScript y calendario ICS. Mostrar IST (UTC+5:30). Hay 12 sesiones locales de ejemplo con etiquetas Demo para evaluar la composición; no son una agenda confirmada.
+
+IMÁGENES Y COMPOSICIÓN ACTUALES
+Usar los recursos aprobados en static/rodri:
+- hero-garden-motion.mp4: vídeo del hero en autoplay, loop, muted y playsinline, con degradado marfil reducido para dar más presencia a la animación. hero-garden.webp se usa como poster y alternativa con movimiento reducido. Hero panorámico con guardián Ethereum violeta, ciudad luminosa, vegetación y luz cálida. Texto a la izquierda e imagen a la derecha; en móvil separar visualmente el rostro y el texto.
+- community-learning.webp: franja ancha después de la agenda, con colaboración y aprendizaje compartido.
+- ethereum-protected-motion.mp4: vídeo cuadrado en autoplay, loop, muted y playsinline. ethereum-protected-v2.webp es su poster y alternativa con movimiento reducido. Panel Speak. Host. Volunteer., con un cristal Ethereum protegido por una barrera translúcida de malla triangular rosa y púrpura y circuitos sobre blanco. Composición completa sin recortes; texto a la izquierda, imagen a la derecha y arriba en móvil. community-response.webp se conserva como variante anterior.
+- volunteer-team.webp: ilustración junto al formulario Volunteer, reflejada con CSS scaleX(-1), completa y sin recorte.
+Los metadatos del hero usan date-calendar.svg y location-pin.svg: iconos de trazo violeta sobre discos lavanda, con detalles de circuitos suaves; el pin incorpora un pequeño símbolo Ethereum. Los PNG originales también están conservados. Mantener encuadres que respeten los rostros y al guardián. Si realmente falta una imagen, crear una coherente con este universo: espacios abiertos de mármol claro, vegetación, ciudad futura, personas colaborando y guardián violeta. Mantener una calidad visual homogénea.
+
+IMPLEMENTACIÓN Y VALIDACIÓN
+Es una aplicación Flask/Jinja con SQLite. El tema está centralizado en static/rodri/palette.css; rodri.css conserva la base del diseño original. Las plantillas principales son templates/index.html y templates/public_base.html; static/rodri/hub.js controla las pestañas sin efectos de texto. Mantener el panel admin, los permisos, la validación de sesiones, CSRF, el formulario Volunteer y el calendario funcionales. No inventar ni reemplazar datos del evento al pulir la presentación.
+
+Trabaja sobre esta versión y afina composición, tipografía, alineaciones, contraste, ritmo y adaptación responsive. Verifica escritorio y móvil, todos los días, navegación por teclado, FAQ, imágenes completas y ausencia de scroll horizontal. Ejecuta .venv/bin/python -m unittest discover tests -q si cambias plantillas o comportamiento. Entrega una implementación revisada visualmente y capturas del resultado, no solo propuestas.

@@ -1,0 +1,13 @@
+Hey Xerxes, aquí tienes el proyecto con los cambios que he realizado tomando como base lo que compartió Lanski. Esta será nuestra versión 3.0 y seguiremos trabajando desde aquí.
+
+No borres ni sobrescribas ninguna versión, archivo o recurso existente. Crea una nueva versión independiente para que todos puedan verla y compararla con la actual; comparte una URL de la V3 sin reemplazar la versión publicada.
+
+Compara este proyecto con la última versión actualmente subida. Como referencia, hemos trabajado desde https://encoding-vault-mills-none.trycloudflare.com/, pero verifica cuál es la publicación más reciente. Si hay discrepancias de contenido, incorpora en la V3 lo que falte: textos, sesiones de agenda, horarios, hosts, enlaces, organizadores y cualquier otro contenido relevante. No sustituyas contenido confirmado por datos de demostración. Si encuentras información contradictoria que no puedas resolver, indícala antes de cambiarla.
+
+Conserva el diseño que hemos trabajado: paleta clara de marfil, blanco, violeta y lavanda; tipografía limpia sin efectos de texto; botones y paneles con esquinas redondeadas; nuevas ilustraciones e iconos. Mantén la estructura de la agenda original: días conectados, introducción del día a la izquierda y sesiones a la derecha, con turnos, hosts y horarios destacados. En móvil debe adaptarse sin perder contenido.
+
+Optimiza los dos vídeos actuales —hero y panel Speak. Host. Volunteer.— para web, manteniendo buena calidad visual, el encuadre y la reproducción automática en bucle sin sonido. Conserva sus originales y crea archivos optimizados nuevos. Mantén las imágenes de respaldo para usuarios con movimiento reducido.
+
+Preserva toda la funcionalidad: panel de administración, permisos, validación de sesiones, formulario de voluntariado y calendario ICS. Revisa escritorio y móvil, contraste, navegación por teclado, carga de imágenes y vídeos, y ejecuta los tests del proyecto. Entrega la V3 visible, un resumen de los cambios y las discrepancias de contenido resueltas o pendientes.
+
+Después haremos nuevos cambios sobre esta versión 3.0, partiendo de este proyecto.

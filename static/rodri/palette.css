@@ -1,0 +1,294 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
+
+/* Light community theme. rodri.css supplies the original agenda structure.
+   Keep palette, spacing, typography and responsive overrides together. */
+:root {
+  --ivory: #f7f3eb;
+  --paper: #ffffff;
+  --warm: #fbf8f2;
+  --lavender: #e6e0f5;
+  --sage: #647d68;
+  --sky: #4f78a8;
+  --amber: #b87932;
+  --coral: #bb5a49;
+  --violet-deep: #4e3f86;
+  --ink: var(--ivory);
+  --surface: var(--paper);
+  --surface-high: #f4f1fa;
+  --text: #1e1b2e;
+  --muted: #5b566b;
+  --purple: #6250a0;
+  --violet: #6250a0;
+  --magenta: var(--violet-deep);
+  --line: rgba(30, 27, 46, .12);
+  --line-bright: rgba(98, 80, 160, .4);
+  --body: "DM Sans", sans-serif;
+  --mono: var(--body);
+  --radius-button: 10px;
+  --radius-card: 16px;
+  --radius-panel: 22px;
+  --content-width: 78rem;
+  color-scheme: light;
+}
+body.palette { background: var(--ivory); font-family: var(--body); line-height: 1.6; }
+.palette ::selection { color: var(--paper); background: var(--violet); }
+.palette h1, .palette h2, .palette h3 { text-wrap: balance; }
+.palette .section, .palette .topbar, .palette .footer,
+.palette .community-band { width: min(100% - 3rem, var(--content-width)); }
+.palette .section { padding: 6rem 0; }
+.palette .display-title {
+  font-family: var(--display); font-size: clamp(2.6rem, 4.5vw, 4.8rem);
+  font-weight: 650; letter-spacing: -.04em; line-height: 1.02; margin-top: 0;
+}
+.palette .text-accent { color: var(--violet); }
+.palette .hero-copy, .palette .involved-content > p, .palette .volunteer-copy > p {
+  color: var(--muted); font-size: 1.05rem; line-height: 1.75;
+}
+.palette .section-heading > p, .palette .schedule-intro p,
+.palette .session-main p, .palette .faq-item p { line-height: 1.75; }
+.palette .eyebrow { color: var(--sage); font-size: .7rem; letter-spacing: .06em; }
+.palette .eyebrow-node { border-color: var(--amber); background: var(--amber); box-shadow: none; }
+.palette a:focus-visible, .palette summary:focus-visible, .palette .button:focus-visible,
+.palette .nav-cta:focus-visible { outline: 2px solid var(--sky); outline-offset: 4px; }
+.palette .chip-circuit, .palette .button::before, .palette .button::after,
+.palette .nav-cta::before, .palette .nav-cta::after, .palette .hero-grid,
+.palette .circuit-divider, .palette .scroll-indicator { display: none; }
+
+/* Header and calm, solid-color actions. */
+.palette .brand-logo { width: 8.5rem; }
+.palette .brand-logo g[id="Security Hub"] path { fill: var(--text); }
+.palette .nav {
+  background: none; border: 0; padding: 0; backdrop-filter: none;
+  font: 500 .88rem/1.4 var(--body); letter-spacing: 0; text-transform: none;
+}
+.palette .nav a { color: var(--muted); }
+.palette .nav a:hover { color: var(--violet); }
+.palette .nav-cta, .palette .button {
+  border: 1px solid transparent; border-radius: var(--radius-button);
+  font: 600 .9rem/1.3 var(--body); letter-spacing: 0; text-transform: none;
+  min-height: 3.2rem; gap: 1.25rem; box-shadow: none; overflow: hidden;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+.palette .nav-cta { min-height: 2.75rem; }
+.palette .button-primary, .palette .nav-cta { color: var(--paper); background: var(--violet); }
+.palette .button-secondary { color: var(--violet-deep); background: var(--paper); border-color: var(--line); }
+.palette .button-primary:hover, .palette .nav-cta:hover { background: var(--violet-deep); box-shadow: none; }
+.palette .button-secondary:hover { background: var(--surface-high); border-color: var(--line-bright); box-shadow: none; }
+.palette .button:active, .palette .nav-cta:active { transform: translateY(1px); }
+
+/* Garden hero: retain the chosen full-bleed composition. */
+.palette .hero {
+  min-height: 48rem;
+  padding: 8.5rem max(1.5rem, calc((100vw - var(--content-width)) / 2)) 5rem;
+}
+.palette .hero::before {
+  background:
+    linear-gradient(90deg, rgba(247, 243, 235, .88) 0%, rgba(247, 243, 235, .75) 30%, rgba(247, 243, 235, .48) 47%, rgba(247, 243, 235, .03) 73%, transparent 100%),
+    linear-gradient(0deg, var(--ivory), transparent 20%);
+}
+.palette .hero-image { opacity: 1; filter: none; object-position: 65% center; }
+.palette .hero-content { width: min(43rem, 55vw); }
+.palette .hero-title {
+  font: 700 clamp(3rem, 5.4vw, 5.75rem)/1.04 var(--display);
+  letter-spacing: -.045em; color: var(--text);
+}
+.palette .hero-copy { max-width: 32rem; }
+.palette .hero-meta { margin-top: 2.5rem; gap: 1rem; }
+.palette .hero-meta-card {
+  grid-template-columns: 5rem minmax(0, 1fr); gap: .75rem;
+  min-height: 7.25rem; padding: 1rem; border: 1px solid var(--line);
+  border-radius: var(--radius-card); background: var(--paper); box-shadow: none; overflow: hidden;
+}
+.palette .hero-meta-card::before { display: none; }
+.palette .hero-meta-card:hover { border-color: var(--line-bright); background: var(--paper); }
+.palette .hero-meta-art, .palette .hero-meta-card:hover .hero-meta-art {
+  width: 5rem; height: 5rem; margin: 0; filter: none; transform: none;
+}
+.palette .hero-meta-copy { gap: .45rem; }
+.palette .hero-meta-copy span { color: var(--sage); font-size: .68rem; letter-spacing: .06em; }
+.palette .hero-meta-copy strong { font-size: .86rem; letter-spacing: 0; font-weight: 600; white-space: normal; }
+
+/* Agenda: original connected day strip, day introduction + session list,
+   large start times, shift bands and host labels. Only theme and refinement. */
+.palette .program-background { display: none; }
+.palette .section-heading { gap: 4rem; margin-bottom: 3rem; align-items: center; }
+.palette .calendar-link, .palette .faq-item p a { color: var(--sky); }
+.palette .calendar-link { font-size: .85rem; letter-spacing: 0; text-transform: none; }
+.palette .calendar-link:hover, .palette .faq-item p a:hover { color: var(--violet-deep); }
+.palette .program-timezone { display: block; color: var(--muted); font-size: .75rem; margin-top: .65rem; }
+.palette .day-tabs {
+  gap: 0; border: 1px solid var(--line); border-bottom: 0;
+  border-radius: var(--radius-card) var(--radius-card) 0 0; overflow: hidden;
+}
+.palette .day-tab {
+  min-height: 7rem; padding: 1.25rem 1.5rem;
+  border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  border-radius: 0; background: var(--paper);
+}
+.palette .day-tab:last-child { border-right: 0; }
+.palette .day-tab span { color: var(--sage); font-size: .7rem; letter-spacing: .07em; }
+.palette .day-tab strong { font-family: var(--display); font-size: 2.4rem; }
+.palette .day-tab strong small { font-family: var(--body); font-size: .7rem; letter-spacing: .03em; }
+.palette .day-tab:hover, .palette .day-tab.is-active { background: var(--surface-high); }
+.palette .day-tab.is-active { box-shadow: inset 0 -2px var(--violet); }
+.palette .day-tab i { display: none; }
+.palette .day-tab:focus-visible { outline-offset: -5px; }
+.palette .schedule {
+  grid-template-columns: minmax(16rem, .74fr) minmax(0, 1.26fr);
+  margin-top: 0; border: 1px solid var(--line); border-top: 0;
+  border-radius: 0 0 var(--radius-panel) var(--radius-panel); overflow: hidden;
+}
+.palette .schedule-intro { background: var(--warm); padding: 2.5rem; }
+.palette .schedule-intro div > span { font-size: .68rem; letter-spacing: .04em; }
+.palette .schedule-intro h3 {
+  font-family: var(--display); font-weight: 550; line-height: 1.04;
+  font-size: clamp(2.2rem, 3.7vw, 4.2rem); letter-spacing: -.04em;
+}
+.palette .schedule-intro p { font-size: .94rem; }
+.palette .shift-head {
+  background: var(--surface-high); padding: 1rem 1.5rem;
+  font-size: .69rem; letter-spacing: .02em;
+}
+.palette .shift-head .shift-time { color: var(--violet); font-size: .9rem; letter-spacing: 0; }
+.palette .shift-head::before { background: var(--amber); }
+.palette .shift-empty { padding: 1.5rem; font-size: .9rem; }
+.palette .session { padding: 1.65rem 1.5rem; }
+.palette .session:hover { background: var(--warm); }
+.palette .session-time { font-size: .72rem; letter-spacing: 0; }
+.palette .session-time strong { font-family: var(--display); font-size: 2.1rem; font-weight: 500; }
+.palette .session:hover .session-time strong { color: var(--violet); }
+.palette .session-main h3 { font-family: var(--body); font-size: 1.15rem; font-weight: 600; letter-spacing: -.025em; }
+.palette .session-main p { font-size: .88rem; }
+.palette .session-tags span {
+  padding: .3rem .5rem; color: var(--violet-deep); background: var(--surface-high);
+  border: 0; border-radius: 20px; font-size: .62rem; letter-spacing: .02em;
+}
+.palette .session-tags .is-demo { color: #87541f; background: #faf1e4; }
+
+/* Community band and split contribution panel. */
+.palette .community-band {
+  position: relative; margin: 0 auto 3rem; border-radius: var(--radius-panel);
+  overflow: hidden; aspect-ratio: 2.35 / 1; background: var(--lavender);
+}
+.palette .community-band img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+.palette .community-band figcaption {
+  position: absolute; left: 1.25rem; bottom: 1.25rem; padding: .45rem .8rem;
+  border-radius: 30px; background: rgba(255, 255, 255, .94);
+  color: var(--text); font: 500 .75rem/1.4 var(--body);
+}
+.palette .involved {
+  display: grid; grid-template-columns: .95fr 1.05fr; align-items: stretch;
+  min-height: 0; padding: 0; margin-bottom: 2rem; background: var(--paper);
+  border-radius: var(--radius-panel); overflow: hidden;
+}
+.palette .involved::after { display: none; }
+.palette .involved-content {
+  grid-column: 1; grid-row: 1; width: auto; align-self: center;
+  padding: clamp(2rem, 4vw, 4rem);
+}
+.palette .involved-art { position: relative; z-index: auto; inset: auto; grid-column: 2; grid-row: 1; min-width: 0; }
+.palette .involved-art img { display: block; width: 100%; height: 100%; min-height: 30rem; object-fit: cover; object-position: 58% center; filter: none; }
+.palette .involved:hover .involved-art img { transform: none; }
+.palette .involved-content .display-title { font-size: clamp(2.5rem, 3.7vw, 4.4rem); }
+.palette .involved-content > p { margin: 1.5rem 0 2rem; }
+
+/* Volunteer form: reflected illustration retains its complete frame. */
+.palette .volunteer { padding: 3rem; border-radius: var(--radius-panel); overflow: hidden; }
+.palette .volunteer-art { margin-top: 2rem; border-radius: var(--radius-card); overflow: hidden; background: var(--lavender); }
+.palette .volunteer-art img { display: block; width: 100%; height: auto; transform: scaleX(-1); }
+.palette .login-form label > span, .palette .volunteer-days legend { font-size: .7rem; letter-spacing: .04em; }
+.palette .login-form input {
+  background: var(--warm); border: 1px solid var(--line); color: var(--text);
+  border-radius: 8px; font-size: .95rem;
+}
+.palette .login-form input::placeholder { color: var(--muted); }
+.palette .login-form input:focus { border-color: var(--sky); box-shadow: 0 0 0 2px rgba(79, 120, 168, .18); }
+.palette .login-form .volunteer-days input { accent-color: var(--violet); border-radius: 2px; }
+.palette .login-form .volunteer-days label { font-size: .8rem; }
+.palette .volunteer-days { gap: .7rem 1rem; }
+
+/* Organizers and FAQ use the same surfaces and spacing as the program. */
+.palette .organizer-grid { gap: .9rem; border: 0; }
+.palette .organizer-card {
+  border: 1px solid var(--line); border-radius: var(--radius-card);
+  min-height: 15rem; padding: 1.25rem;
+}
+.palette .organizer-card::before { display: none; }
+.palette .organizer-logo { border-color: var(--line); border-radius: var(--radius-button); background: var(--warm); box-shadow: none; }
+.palette .organizer-logo img { filter: none; opacity: 1; }
+.palette .organizer-card:hover .organizer-logo,
+.palette .organizer-card:hover .organizer-logo img { transform: none; box-shadow: none; }
+.palette .organizer-card strong { font-size: .88rem; font-weight: 500; }
+.palette .faq { gap: 4rem; }
+.palette .faq-heading .display-title { font-size: clamp(2.6rem, 4.3vw, 4.6rem); }
+.palette .faq-heading .faq-kicker { color: var(--sage); font-size: .7rem; letter-spacing: .08em; }
+.palette .faq-item:hover, .palette .faq-item[open] { background: rgba(230, 224, 245, .3); }
+.palette .faq-item summary strong { font: 500 1rem/1.5 var(--body); }
+.palette .faq-item summary span { border: 0; border-radius: 50%; background: var(--lavender); box-shadow: none; font-size: .7rem; font-weight: 500; }
+.palette .faq-item summary span::after { display: none; }
+.palette .footer { font-size: .7rem; letter-spacing: .04em; padding: 1.75rem 0; }
+.palette .login-modal { border-radius: var(--radius-panel); background: var(--paper); border-color: var(--line-bright); box-shadow: 0 1rem 3rem rgba(30,27,46,.08); }
+.palette .login-modal::before { box-shadow: none; }
+.palette .login-title { line-height: 1.05; }
+.palette .login-errors, .palette .login-flash { color: var(--coral); border-radius: var(--radius-button); border-color: rgba(187,90,73,.4); background: rgba(187,90,73,.06); }
+.palette .login-footer { color: var(--muted); }
+
+@media (max-width: 68rem) {
+  .palette .hero-content { width: min(40rem, 68vw); }
+  .palette .schedule-intro { padding: 2rem; border-right: 1px solid var(--line); border-bottom: 0; }
+  .palette .section-heading, .palette .faq { gap: 2.5rem; }
+  .palette .organizer-logo { width: 7rem; height: 7rem; }
+}
+@media (max-width: 56.25rem) {
+  .palette .schedule { grid-template-columns: 1fr; }
+  .palette .schedule-intro { border-right: 0; border-bottom: 1px solid var(--line); }
+}
+@media (max-width: 46rem) {
+  .palette .section, .palette .footer, .palette .community-band { width: calc(100% - 2rem); }
+  .palette .section { padding: 4rem 0; }
+  .palette .topbar { width: calc(100% - 2rem); }
+  .palette .brand-logo { width: 6.5rem; }
+  .palette .nav-cta { font-size: .8rem; }
+  .palette .hero { min-height: 0; padding: 22rem 1rem 3rem; }
+  .palette .hero-content { width: 100%; }
+  .palette .hero-image { height: 30rem; object-position: 74% center; }
+  .palette .hero::before {
+    background: linear-gradient(0deg, var(--ivory) 0%, var(--ivory) calc(100% - 30rem), rgba(247,243,235,.7) calc(100% - 22rem), rgba(247,243,235,.05) calc(100% - 13rem));
+  }
+  .palette .hero-title { font-size: clamp(2.6rem, 11.5vw, 4rem); }
+  .palette .hero-copy { font-size: 1rem; }
+  .palette .hero-meta { margin-top: 2rem; }
+  .palette .hero-meta-card { min-height: 6.5rem; }
+  .palette .hero-meta-copy strong { font-size: .83rem; }
+  .palette .display-title, .palette .faq-heading .display-title { font-size: clamp(2.4rem, 10vw, 3.8rem); }
+  .palette .section-heading { margin-bottom: 2rem; gap: 1.5rem; }
+  .palette .day-tab { min-height: 6rem; padding: 1rem; }
+  .palette .day-tab:nth-child(2) { border-right: 0; }
+  .palette .schedule-intro { padding: 1.5rem; }
+  .palette .schedule-intro h3 { font-size: 2.2rem; }
+  .palette .shift-head { padding: 1rem; }
+  .palette .session { padding: 1.4rem 1rem; }
+  .palette .community-band { aspect-ratio: 4 / 3; margin-bottom: 1.5rem; border-radius: var(--radius-card); }
+  .palette .community-band img { object-position: 48% center; }
+  .palette .community-band figcaption { left: .75rem; bottom: .75rem; }
+  .palette .involved { grid-template-columns: 1fr; padding: 0; }
+  .palette .involved-art { grid-column: 1; grid-row: 1; aspect-ratio: 4 / 3; }
+  .palette .involved-art img { min-height: 0; object-position: 55% center; }
+  .palette .involved-content { grid-column: 1; grid-row: 2; padding: 2rem 1.25rem; }
+  .palette .involved-content .display-title { font-size: clamp(2.4rem, 10vw, 3.8rem); }
+  .palette .volunteer { padding: 2rem 1.25rem; }
+  .palette .organizer-logo { width: 6rem; height: 6rem; }
+  .palette .faq { gap: 2rem; }
+}
+
+/* Ethereum protection artwork: preserve the complete symbol and halo. */
+.palette .ethereum-art { display: grid; place-items: center; aspect-ratio: 1; background: #fff; }
+.palette .ethereum-art img { min-height: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+
+/* Date and location use matching, crisp SVG icons in the light palette. */
+.palette .hero-meta-card { grid-template-columns: 3.25rem minmax(0, 1fr); min-height: 6.25rem; gap: 1rem; }
+.palette .hero-meta-art, .palette .hero-meta-card:hover .hero-meta-art { width: 3.25rem; height: 3.25rem; }
+
+/* Silent Ethereum video overlays its static fallback without cropping. */
+.palette .ethereum-art img, .palette .ethereum-video { grid-area: 1 / 1; min-height: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+@media (prefers-reduced-motion: reduce) { .palette .ethereum-video { display: none; } }

@@ -11,11 +11,13 @@
 {# Rodri's stylesheet: Tailwind preflight + his V1.1 src/index.css verbatim (it @imports Inter Tight + IBM Plex Mono). #}
 <link rel="stylesheet" href="{{ url_for('static', filename='rodri/rodri.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='rodri/hub.css') }}">
+{# Palette only: keep the original Rodri layout and media. #}
+<link rel="stylesheet" href="{{ url_for('static', filename='rodri/palette.css') }}">
 </head>
-<body class="rodri {% block body_class %}{% endblock %}">
+<body class="rodri palette {% block body_class %}{% endblock %}">
 <div class="site-shell" id="top">
 <header class="topbar">
-  <a class="brand" href="{{ url_for('index') }}#top" aria-label="{{ cfg.HUB_NAME }} home"><img class="brand-logo" src="{{ url_for('static', filename='rodri/logo.svg') }}" alt="{{ cfg.HUB_NAME }}" width="599" height="196"></a>
+  <a class="brand" href="{{ url_for('index') }}#top" aria-label="{{ cfg.HUB_NAME }} home">{% include "_brand_logo.html" %}</a>
   {% block nav %}
   <nav class="nav" aria-label="Main navigation">
     <a href="{{ url_for('index') }}#program">Program</a>
@@ -24,7 +26,7 @@
     <a href="{{ url_for('index') }}#faq">FAQ</a>
   </nav>
   <div class="nav-actions">
-    <a class="nav-cta" href="{{ cfg.DEVCON_TICKETS_URL }}" rel="noopener" target="_blank">{% include "_chip_circuit.html" %}<span>JOIN THE HUB</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg></a>
+    <a class="nav-cta" href="{{ cfg.DEVCON_TICKETS_URL }}" rel="noopener" target="_blank">{% include "_chip_circuit.html" %}<span>Join the hub</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg></a>
   </div>
   {% endblock %}
 </header>

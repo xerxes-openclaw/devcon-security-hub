@@ -1,0 +1,16 @@
+Security Hub — punto de partida para la versión 3.0
+
+Este paquete contiene el código y todos los recursos del proyecto actual, incluidas las versiones anteriores de las imágenes y los vídeos originales incorporados. No incluye entornos locales de Python, credenciales (.env), bases de datos locales ni cachés.
+
+Entorno recomendado: Python 3.12 o superior con soporte hashlib.scrypt. Crear un entorno virtual, instalar requirements.txt y ejecutar app.py. El servidor local se abre en http://127.0.0.1:4590. También se puede usar sh run.sh con un Python compatible.
+
+El primer arranque crea una .env privada y una base de datos nueva. Para ver las sesiones de demostración: .venv/bin/python -m flask --app app seed-demo. Son ejemplos, no la agenda confirmada. Recuperar el contenido vigente desde la última versión publicada antes de compartir la V3 como definitiva.
+
+Pruebas: .venv/bin/python -m unittest discover tests -q. La suite de 47 tests pasó durante la revisión del diseño.
+
+Tema actual: static/rodri/palette.css.
+Plantillas: templates/index.html, templates/public_base.html.
+Interacciones: static/rodri/hub.js.
+Vídeos actuales: static/rodri/hero-garden-motion.mp4 y static/rodri/ethereum-protected-motion.mp4.
+Contexto de diseño completo: handoff-prompt.txt.
+Petición de continuidad: PROMPT-PARA-XERXES.txt.

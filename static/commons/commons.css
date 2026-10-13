@@ -1,0 +1,377 @@
+/* Open Commons (Lanski's "EthSecurity Hub / Open Commons" pitch).
+   Light, warm re-theme loaded after rodri.css + hub.css. Same markup,
+   same copy; only tokens, surfaces and a few layouts change.
+   Palette roles: violet = identity + primary actions, ivory = open space,
+   sage = secondary accents, sky = links, amber = small warm highlights,
+   coral = incidents only. */
+
+:root {
+  --ivory: #f7f3eb;
+  --paper: #ffffff;
+  --warm: #fbf8f2;
+  --lav: #e6e0f5;
+  --lav-2: #cfc6ec;
+  --lav-soft: #f4f1fa;
+  --sage: #647d68;
+  --sky: #4f78a8;
+  --amber: #b87932;
+  --coral: #bb5a49;
+  --violet-deep: #4e3f86;
+
+  /* rodri.css tokens, re-pointed */
+  --ink: #f7f3eb;            /* rodri uses --ink as the page background */
+  --surface: #ffffff;
+  --surface-high: #f4f1fa;
+  --text: #1e1b2e;
+  --muted: #5b566b;
+  --purple: #6250a0;
+  --violet: #6250a0;
+  --magenta: #4e3f86;        /* rodri's hover/accent color: a deeper violet here */
+  --line: rgba(30, 27, 46, 0.12);
+  --line-bright: rgba(98, 80, 160, 0.45);
+
+  /* hub.js fuzzy headline: calm, static violet-to-sky */
+  --fuzzy-from: #6250a0;
+  --fuzzy-to: #4f78a8;
+  --fuzzy-jitter: 0;
+
+  --radius: 10px;
+  --radius-card: 16px;
+  --radius-panel: 22px;
+  --shadow-soft: 0 1px 2px rgba(30, 27, 46, 0.04), 0 8px 24px rgba(30, 27, 46, 0.05);
+}
+
+html { background: var(--ivory); }
+body.commons { color: var(--text); background: var(--ivory); }
+.commons ::selection { color: #fff; background: var(--violet); }
+
+/* ------------------------------------------------------------ topbar */
+.commons .topbar { border-bottom: 1px solid var(--line); }
+.commons .brand { gap: 0.7rem; }
+.commons .brand-emblem { display: block; width: auto; height: 2.6rem; }
+.commons .brand-name { color: var(--text); font: 600 1.15rem/1 var(--display); letter-spacing: -0.015em; white-space: nowrap; }
+.commons .nav {
+  gap: 2rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  font: 500 0.95rem/1 var(--display);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.commons .nav a { color: var(--muted); }
+.commons .nav a:hover { color: var(--text); }
+.commons .nav a::after { bottom: -0.45rem; background: var(--violet); }
+
+/* ------------------------------------------------------------ buttons */
+.commons .chip-circuit,
+.commons .nav-cta::before, .commons .nav-cta::after,
+.commons .button::before, .commons .button::after { display: none; }
+
+.commons .nav-cta,
+.commons .button {
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  box-shadow: none;
+  font: 600 0.95rem/1 var(--display);
+  letter-spacing: 0;
+  text-transform: none;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+.commons .nav-cta { min-height: 2.75rem; padding: 0 1.1rem; color: #fff; background: var(--violet); }
+/* "JOIN THE HUB" is uppercase in the markup: render it in sentence case */
+.commons .nav-cta > span { display: inline-block; text-transform: lowercase; }
+.commons .nav-cta > span::first-letter { text-transform: uppercase; }
+.commons .nav-cta:hover { border-color: transparent; background: var(--violet-deep); box-shadow: none; }
+
+.commons .button { min-height: 3.3rem; gap: 1.25rem; padding: 0 1.35rem; }
+.commons .button:hover { transform: translateY(-1px); box-shadow: none; }
+.commons .button-primary { color: #fff; background: var(--violet); }
+.commons .button-primary:hover { background: var(--violet-deep); }
+.commons .button-secondary { color: var(--violet); background: var(--paper); border-color: var(--lav-2); }
+.commons .button-secondary:hover { border-color: var(--violet); background: var(--lav-soft); }
+.commons .nav-cta:focus-visible, .commons .button:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
+
+/* ------------------------------------------------------------ hero */
+.commons .hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: 3.5rem;
+  min-height: 0;
+  padding: 9rem max(1.5rem, calc((100vw - 90rem) / 2)) 5rem;
+}
+.commons .hero::before, .commons .scroll-indicator { display: none; }
+.commons .hero-content { grid-column: 1; grid-row: 1; width: auto; }
+.commons .hero-title {
+  margin: 0 0 1.5rem;
+  color: var(--text);
+  font-size: clamp(3rem, 5vw, 5.2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+.commons .hero-copy { max-width: 33rem; margin-bottom: 2.2rem; color: var(--muted); font-size: 1.15rem; line-height: 1.6; }
+
+.commons .hero-art {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-soft);
+}
+.commons .hero-art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 72% center; }
+
+/* Short captions from the deck, as a quiet label on each scene */
+.commons figure > figcaption {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.9);
+  font: 600 0.78rem/1 var(--display);
+  letter-spacing: 0.01em;
+}
+
+.commons .hero-meta { width: auto; max-width: 40rem; gap: 0.75rem; margin-top: 2.5rem; }
+.commons .hero-meta-card {
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  min-height: 0;
+  gap: 0.9rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--paper);
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.commons .hero-meta-card::before { display: none; }
+.commons .hero-meta-card:hover { border-color: var(--lav-2); background: var(--paper); }
+.commons .hero-meta-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0.65rem;
+  border-radius: 50%;
+  background: var(--lav);
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.commons .hero-meta-copy { gap: 0.45rem; }
+.commons .hero-meta-copy span { color: var(--sage); font: 600 0.7rem/1 var(--display); letter-spacing: 0.12em; }
+.commons .hero-meta-copy strong { color: var(--text); font: 600 0.95rem/1.3 var(--display); letter-spacing: 0.01em; white-space: normal; }
+
+/* ------------------------------------------------------------ sections */
+.commons .circuit-divider, .commons .program-background { display: none; }
+.commons .section { padding: 6rem 0; }
+.commons .display-title {
+  color: var(--text);
+  font-size: clamp(2.6rem, 4.6vw, 4.6rem);
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+}
+.commons .section-heading { margin-bottom: 3rem; }
+.commons .section-heading > p { color: var(--muted); }
+.commons .eyebrow { color: var(--sage); font: 600 0.74rem/1.2 var(--display); letter-spacing: 0.14em; }
+.commons .eyebrow-node { width: 0.5rem; height: 0.5rem; border: 0; border-radius: 50%; background: var(--amber); box-shadow: none; }
+
+.commons .calendar-link { color: var(--sky); font: 600 0.92rem/1 var(--display); letter-spacing: 0; text-transform: none; gap: 0.5rem; }
+.commons .calendar-link:hover { color: var(--violet); }
+.commons .faq-item p a, .commons .footer > p a { color: var(--sky); }
+.commons .faq-item p a:hover, .commons .footer > p a:hover { color: var(--violet); }
+
+/* Program: day tabs as soft cards, schedule as one rounded panel */
+.commons .day-tabs { gap: 0.75rem; border: 0; }
+.commons .day-tab {
+  min-height: 6.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--paper);
+}
+.commons .day-tab:hover { background: var(--lav-soft); }
+.commons .day-tab.is-active { border-color: var(--violet); background: var(--lav-soft); }
+.commons .day-tab i { display: none; }
+.commons .day-tab span { color: var(--sage); font: 600 0.72rem/1 var(--display); letter-spacing: 0.1em; }
+.commons .day-tab strong { color: var(--text); }
+.commons .day-tab strong small { color: var(--muted); font-family: var(--display); font-weight: 600; }
+.commons .day-tab.is-active strong small { color: var(--violet); }
+
+.commons .schedule {
+  margin-top: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  background: var(--paper);
+}
+.commons .schedule-intro { border-color: var(--line); background: var(--warm); }
+.commons .schedule-intro div > span { color: var(--sage); font: 600 0.72rem/1 var(--display); letter-spacing: 0.1em; }
+.commons .schedule-intro h3 { color: var(--text); }
+.commons .schedule-intro p, .commons .session-main p, .commons .shift-empty { color: var(--muted); }
+
+.commons .shift-head { color: var(--muted); background: var(--lav-soft); font: 500 0.78rem/1.3 var(--display); letter-spacing: 0.04em; }
+.commons .shift-head::before { width: 3px; background: var(--amber); }
+.commons .shift-head .shift-time { color: var(--violet); font: 650 1rem/1 var(--display); letter-spacing: 0; }
+.commons .session:hover { background: var(--warm); }
+.commons .session-time { color: var(--muted); font: 500 0.78rem/1 var(--display); letter-spacing: 0.02em; }
+.commons .session-time strong { color: var(--text); }
+.commons .session:hover .session-time strong { color: var(--violet); }
+.commons .session-main h3 { color: var(--text); }
+.commons .session-tags span {
+  padding: 0.32rem 0.6rem;
+  border: 1px solid var(--lav-2);
+  border-radius: 999px;
+  color: var(--violet);
+  background: var(--lav-soft);
+  font: 600 0.66rem/1 var(--display);
+  letter-spacing: 0.05em;
+}
+.commons .session-tags span.is-demo { border-color: rgba(184, 121, 50, 0.45); color: #8a5a22; background: #fbf3e8; }
+
+/* Incident response band between Program and Get involved */
+.commons .commons-band {
+  position: relative;
+  width: min(100% - 3rem, 90rem);
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: var(--radius-panel);
+}
+.commons .commons-band img { display: block; width: 100%; height: clamp(16rem, 30vw, 28rem); object-fit: cover; object-position: center 40%; }
+
+/* Get involved: text panel left, Defense of the commons on the right */
+.commons .involved {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: stretch;
+  min-height: 0;
+  margin: 5rem auto 1.5rem;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  background: var(--paper);
+}
+.commons .involved::after { display: none; }
+.commons .involved-art { position: relative; z-index: auto; inset: auto; grid-column: 2; grid-row: 1; min-height: 30rem; margin: 0; }
+.commons .involved-art img { position: absolute; inset: 0; filter: none; object-position: 55% center; }
+.commons .involved-content { grid-column: 1; grid-row: 1; align-self: center; width: auto; padding: 4.5rem 4rem; }
+.commons .involved-content > p { color: var(--muted); }
+
+/* Volunteer */
+.commons .volunteer { padding: 4rem; margin-bottom: 0; border-color: var(--line); border-radius: var(--radius-panel); background: var(--paper); }
+.commons .volunteer-copy > p { color: var(--muted); }
+.commons .login-form label > span,
+.commons .volunteer-days legend { color: var(--violet); font: 600 0.74rem/1 var(--display); letter-spacing: 0.1em; }
+.commons .login-form input {
+  min-height: 3.1rem;
+  border: 1px solid #d9d3e3;
+  border-radius: var(--radius);
+  color: var(--text);
+  background: var(--warm);
+  font: 500 1rem/1 var(--display);
+}
+.commons .login-form input::placeholder { color: #8b8698; }
+.commons .login-form input:focus { border-color: var(--violet); box-shadow: 0 0 0 3px rgba(98, 80, 160, 0.15); }
+.commons .login-form .volunteer-days label { color: var(--text); font: 500 0.92rem/1 var(--display); }
+.commons .login-form .volunteer-days input { accent-color: var(--violet); }
+.commons .login-submit { justify-content: center; }
+.commons .volunteer-thanks { color: var(--text); font: 500 1rem/1.6 var(--display); }
+
+/* Organizers */
+.commons .organizer-grid { gap: 0.75rem; border: 0; }
+.commons .organizer-card {
+  min-height: 15rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--paper);
+}
+.commons .organizer-card::before { display: none; }
+.commons .organizer-card:hover { border-color: var(--lav-2); background: var(--warm); }
+.commons .organizer-logo { border: 0; border-radius: var(--radius-card); background: var(--lav-soft); }
+.commons .organizer-card:hover .organizer-logo { box-shadow: none; }
+.commons .organizer-logo img { opacity: 1; filter: none; }
+.commons .organizer-card strong { color: var(--text); }
+
+/* FAQ */
+.commons .faq-heading .faq-kicker { color: var(--sage); font: 600 0.85rem/1.2 var(--display); letter-spacing: 0.16em; }
+.commons .faq-list { border-color: var(--line); }
+.commons .faq-item { border-color: var(--line); }
+.commons .faq-item:hover, .commons .faq-item[open] { background: rgba(98, 80, 160, 0.04); }
+.commons .faq-item summary span {
+  border: 0;
+  border-radius: 50%;
+  color: var(--violet);
+  background: var(--lav);
+  box-shadow: none;
+  font: 600 0.8rem/1 var(--display);
+}
+.commons .faq-item summary span::after { display: none; }
+.commons .faq-item summary strong { color: var(--text); }
+.commons .faq-item p { color: var(--muted); }
+
+/* Footer */
+.commons .footer { border-color: var(--line); color: var(--muted); font: 500 0.82rem/1 var(--display); letter-spacing: 0.04em; }
+.commons .footer-id img { width: 1.4rem; }
+
+/* Admin login (extends public_base): light card */
+.commons .login-page .hero-grid, .commons .login-modal-grid, .commons .login-modal::before { display: none; }
+.commons .login-modal { border: 1px solid var(--line); border-radius: var(--radius-panel); background: var(--paper); box-shadow: var(--shadow-soft); }
+.commons .login-close { border-color: var(--line); border-radius: var(--radius); background: var(--paper); }
+.commons .login-close:hover { border-color: var(--violet); background: var(--lav-soft); }
+.commons .login-title { color: var(--text); }
+.commons .login-title span { color: var(--violet); }
+.commons .login-copy { color: var(--muted); }
+.commons .login-errors, .commons .login-flash { border-color: rgba(187, 90, 73, 0.35); border-radius: var(--radius); color: var(--coral); background: #fbefec; font-family: var(--display); }
+.commons .login-flash li.ok { color: var(--sage); }
+
+/* ------------------------------------------------------------ tablet */
+@media (max-width: 68rem) {
+  .commons .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; }
+  .commons .organizer-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ------------------------------------------------------------ phone */
+@media (max-width: 46rem) {
+  .commons .brand-emblem { height: 2.1rem; }
+  .commons .brand-name { font-size: 1rem; }
+  .commons .nav-cta { min-height: 2.5rem; padding: 0 0.85rem; font-size: 0.86rem; }
+
+  /* Illustration above the text, framed on the guardian and the people */
+  .commons .hero { grid-template-columns: minmax(0, 1fr); gap: 2rem; padding: 6.25rem 1rem 3.5rem; align-items: start; }
+  .commons .hero-art { grid-column: 1; grid-row: 1; aspect-ratio: 5 / 4; border-radius: var(--radius-card); }
+  .commons .hero-art img { object-position: 80% center; }
+  .commons .hero-content { grid-column: 1; grid-row: 2; }
+  .commons .hero-title { font-size: clamp(2.6rem, 12vw, 3.4rem); }
+  .commons .hero-copy { font-size: 1.02rem; }
+  .commons .hero-meta { gap: 0.6rem; margin-top: 1.75rem; }
+  .commons .hero-meta-card { padding: 0.9rem 1rem; }
+
+  .commons .section { padding: 4rem 0; }
+  .commons .involved { padding: 0; }
+  .commons .volunteer { padding: 2rem 1.25rem; }
+  .commons .display-title { font-size: clamp(2.4rem, 11vw, 3.2rem); }
+  .commons .day-tabs { gap: 0.5rem; }
+
+  .commons .commons-band { width: calc(100% - 2rem); border-radius: var(--radius-card); }
+  .commons .commons-band img { height: 15rem; object-position: 42% center; }
+
+  .commons .involved { grid-template-columns: minmax(0, 1fr); margin-top: 3.5rem; border-radius: var(--radius-card); }
+  .commons .involved-art { grid-column: 1; grid-row: 1; min-height: 16rem; }
+  .commons .involved-art img { object-position: 55% center; }
+  .commons .involved-content { grid-column: 1; grid-row: 2; padding: 2rem 1.25rem 2.25rem; }
+
+  .commons .volunteer { border-radius: var(--radius-card); }
+  .commons .organizer-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+  .commons .organizer-card { min-height: 12rem; }
+  .commons .footer { padding: 1.5rem 0 2rem; }
+}
