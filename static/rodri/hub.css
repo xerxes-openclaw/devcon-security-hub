@@ -124,3 +124,4 @@
 /* Anamarija 2026-10-30: ticket disclaimer under the date/location cards. */
 .ticket-note { width: min(52rem, calc(100vw - 3rem)); margin: .9rem 0 0; padding: .7rem 1rem; border-left: 3px solid var(--violet, #6250a0); background: rgba(98, 80, 160, .07); border-radius: 0 .6rem .6rem 0; font-size: .92rem; line-height: 1.5; color: #4a4360; }
 .ticket-note a { color: var(--violet, #6250a0); font-weight: 600; text-decoration: underline; text-underline-offset: .2em; }
+.hero-meta-link { color: inherit; text-decoration: none; transition: border-color .18s, transform .18s; } .hero-meta-link:hover { transform: translateY(-2px); border-color: var(--violet, #6250a0); } .hero-meta-link strong { text-decoration: underline; text-underline-offset: .25em; text-decoration-color: rgba(98,80,160,.45); }

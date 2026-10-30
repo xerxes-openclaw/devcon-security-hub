@@ -25,10 +25,10 @@
         <img class="hero-meta-art" src="{{ url_for('static', filename='rodri/date-calendar.svg') }}" alt="" width="64" height="64" aria-hidden="true">
         <div class="hero-meta-copy"><span>DATE</span><strong>{{ date_range }}</strong></div>
       </div>
-      <div class="hero-meta-card">
+      <a class="hero-meta-card hero-meta-link" href="https://maps.app.goo.gl/KFtPQqkmLQLfgZd77?g_st=ac" target="_blank" rel="noopener">
         <img class="hero-meta-art" src="{{ url_for('static', filename='rodri/location-pin.svg') }}" alt="" width="64" height="64" aria-hidden="true">
         <div class="hero-meta-copy"><span>LOCATION</span><strong>{{ cfg.EVENT_VENUE|upper }} &middot; {{ city|upper }}</strong></div>
-      </div>
+      </a>
     </div>
     <p class="ticket-note">The Security Hub is part of Devcon 8. A valid <a href="https://devcon.org/en/tickets/" target="_blank" rel="noopener">Devcon conference ticket</a> is required for entry.</p>
   </div>
