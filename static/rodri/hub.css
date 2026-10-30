@@ -119,3 +119,4 @@
     background: linear-gradient(0deg, var(--ink) 0%, var(--ink) calc(100% - 30rem), rgba(8, 5, 15, 0.55) calc(100% - 22rem), rgba(8, 5, 15, 0.05) calc(100% - 13rem));
   }
 }
+.supporters-heading { margin-top: 3.5rem; }

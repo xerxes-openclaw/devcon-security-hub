@@ -72,11 +72,21 @@
 <section class="organizers section" id="organizers" aria-labelledby="organizers-title">
   <div class="section-heading compact">
     <div>
-      <h2 class="display-title" id="organizers-title">ORGANIZERS</h2>
+      <h2 class="display-title" id="organizers-title">ORGANIZED BY</h2>
     </div>
   </div>
   <div class="organizer-grid">
     {% for name, url, logo in cfg.ORGANIZERS %}
+    <a class="organizer-card" href="{{ url }}" target="_blank" rel="noopener"><div class="organizer-logo"><img src="{{ url_for('static', filename='img/orgs/' + logo) }}" alt="{{ name }} logo" width="112" height="112" loading="lazy"></div><strong>{{ name }}</strong>{{ arrow }}</a>
+    {% endfor %}
+  </div>
+  <div class="section-heading compact supporters-heading">
+    <div>
+      <h2 class="display-title">WITH SUPPORT FROM</h2>
+    </div>
+  </div>
+  <div class="organizer-grid">
+    {% for name, url, logo in cfg.SUPPORTERS %}
     <a class="organizer-card" href="{{ url }}" target="_blank" rel="noopener"><div class="organizer-logo"><img src="{{ url_for('static', filename='img/orgs/' + logo) }}" alt="{{ name }} logo" width="112" height="112" loading="lazy"></div><strong>{{ name }}</strong>{{ arrow }}</a>
     {% endfor %}
   </div>

@@ -113,13 +113,29 @@ DEVCON_TICKETS_URL = "https://luma.com/uxs32jih"
 TELEGRAM_URL = ENV.get("TELEGRAM_URL", "").strip()
 
 ORGANIZERS = [
-    # (name, X url, logo file in static/img/orgs). Order set by Zep 2026-10-08:
-    # TheDAO Security Fund first, SEAL second. All confirmed per Anamarija.
+    # (name, X url, logo file in static/img/orgs). Anamarija 2026-10-30:
+    # TheDAO Security Fund is the sole organizer; everyone else is SUPPORTERS.
     ("TheDAO Security Fund", "https://x.com/thedaofund", "thedao.jpg"),
+]
+SUPPORTERS = [
+    # Order as listed by Anamarija 2026-10-30. Logos = X avatars, except
+    # Crossbar (mark from crossbar-inc.com). Handles checked against each site.
     ("SEAL", "https://x.com/_SEAL_Org", "seal.png"),
-    ("ChainSecurity", "https://x.com/chain_security", "chainsecurity.jpg"),
     ("zeroShadow", "https://x.com/zeroshadow_io", "zeroshadow.jpg"),
-    ("Argot", "https://x.com/argotorg", "argot.jpg"),
+    ("Argot Collective", "https://x.com/argotorg", "argot.jpg"),
+    ("ChainSecurity", "https://x.com/chain_security", "chainsecurity.jpg"),
+    ("WalletBeat", "https://x.com/walletbeat", "walletbeat.jpg"),
+    ("CertiK", "https://x.com/CertiK", "certik.jpg"),
+    ("Quantstamp", "https://x.com/Quantstamp", "quantstamp.jpg"),
+    ("HackenProof", "https://x.com/HackenProof", "hackenproof.jpg"),
+    ("Consensys Diligence", "https://x.com/ConsensysAudits", "consensys-diligence.jpg"),
+    ("Crossbar", "https://x.com/crossbar_inc", "crossbar.jpg"),
+    ("QuillAudits", "https://x.com/QuillAudits_AI", "quillaudits.jpg"),
+    ("Bluethroat Labs", "https://x.com/bluethroat_labs", "bluethroat.jpg"),
+    ("OKcontract Labs", "https://x.com/okcontract", "okcontract.jpg"),
+    ("EVVM", "https://x.com/EVVMorg", "evvm.jpg"),
+    ("Blossom Labs", "https://x.com/blossom_labs", "blossomlabs.jpg"),
+    ("Sigma Prime", "https://x.com/sigp_io", "sigmaprime.jpg"),
 ]
 ORGANIZED_BY = ("TheDAO Security Fund", "https://thedao.fund/")
 DISCLAIMER = ("Community-run hub. Not an official Devcon or Ethereum "
