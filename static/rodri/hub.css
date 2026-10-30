@@ -121,3 +121,5 @@
 }
 .supporters-heading { margin-top: 3.5rem; }
 .hero-copy:has(+ .hero-copy-2) { margin-bottom: .8rem; } .hero-copy strong { font-weight: 700; color: inherit; }
+/* Anamarija 2026-10-30: ticket disclaimer under the date/location cards. */
+.ticket-note { width: min(52rem, calc(100vw - 3rem)); margin: .9rem 0 0; padding: .7rem 1rem; border-left: 3px solid var(--violet, #6250a0); background: rgba(98, 80, 160, .07); border-radius: 0 .6rem .6rem 0; font-size: .92rem; line-height: 1.5; color: #4a4360; }
