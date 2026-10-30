@@ -74,8 +74,9 @@ HUB_LOCATION = ENV.get("HUB_LOCATION", "Floor and room to be announced")
 TIMEZONE_NAME = "Asia/Kolkata"
 TZ = _dt.timezone(_dt.timedelta(hours=5, minutes=30), "IST")  # no DST in India
 
-MISSION = ("Four days where Ethereum's security community works together on "
-           "what it takes to make Ethereum safer than the banks.")
+# Hero + meta description: Luma page wording (Anamaria 2026-10-30).
+MISSION = ("Ethereum's future depends on its security. And making it safer takes all of us. "
+           "Our ultimate goal? To make Ethereum safer than the banks.")
 
 # Day number -> (date, theme, one-line description from the forum proposal)
 DAYS = {
