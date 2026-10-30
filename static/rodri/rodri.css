@@ -307,6 +307,7 @@ button { color: inherit; font: inherit; }
   line-height: 0.96;
 }
 .hero-title span { display: block; }
+.hero-title span + span { margin-top: 0.35em; font-size: 0.42em; letter-spacing: -0.03em; color: var(--violet, #6250a0); }
 .hero-copy {
   max-width: 34rem;
   margin: 0 0 2.2rem;
