@@ -44,49 +44,10 @@
     <div class="program-intro">
       <p>A working space for the people protecting Ethereum: researchers, auditors, builders, responders and everyone ready to learn.</p>
       <div class="program-cta">
-        <a class="button button-secondary calendar-button" href="{{ url_for('agenda_ics') }}">{{ chip }}<span class="button-label">Subscribe to the calendar</span>{{ arrow }}</a>
-        <span class="program-timezone">All times in IST (UTC+5:30)</span>
+        <a class="button button-primary" href="https://app.devcon.org/schedule?hubs=1" target="_blank" rel="noopener">{{ chip }}<span class="button-label">See the schedule</span>{{ arrow }}</a>
       </div>
     </div>
   </div>
-
-  <div class="day-tabs" role="tablist" aria-label="Program days" id="agenda">
-    {% for d in days %}
-    <a class="day-tab{% if d.n == active %} is-active{% endif %}" role="tab" id="tab-{{ d.n }}" href="?day={{ d.n }}#program" aria-controls="day-{{ d.n }}" aria-selected="{{ 'true' if d.n == active else 'false' }}" tabindex="{{ '0' if d.n == active else '-1' }}" data-day="{{ d.n }}"><span>{{ d.date.strftime('%A') }}</span><strong>{{ d.date.day }} <small>{{ d.date.strftime('%b') }}</small></strong><i></i></a>
-    {% endfor %}
-  </div>
-
-  {% for d in days %}
-  {% set day_demo = d.shifts|map(attribute='sessions')|sum(start=[])|selectattr('is_demo')|list %}
-  <div class="schedule" id="day-{{ d.n }}" role="tabpanel" aria-labelledby="tab-{{ d.n }}"{% if d.n != active %} hidden{% endif %}>
-    <div class="schedule-intro">
-      <div>
-        <span>{{ d.date.strftime('%a') }} {{ d.date.day }} {{ d.date.strftime('%b') }}{% if day_demo %} &middot; Sessions marked demo{% endif %}</span>
-        <h3>{{ d.theme }}</h3>
-        <p>{{ d.blurb }}</p>
-      </div>
-    </div>
-    <div class="session-list">
-      {% for blk in d.shifts %}{% set s = blk.shift %}
-      <div class="shift" role="group" aria-label="Shift {{ s.start_min|hhmm }} to {{ s.end_min|hhmm }}">
-        <div class="shift-head"><span class="shift-time">{{ s.start_min|hhmm }} to {{ s.end_min|hhmm }}</span><span class="host">Host: <strong>{{ s.host_name or 'to be announced' }}</strong></span></div>
-        {% for x in blk.sessions %}
-        <article class="session">
-          <div class="session-time"><strong>{{ x.start_min|hhmm }}</strong><span>to {{ x.end_min|hhmm }}</span></div>
-          <div class="session-main">
-            <div class="session-tags"><span>{{ x.type }}</span>{% if x.speakers %}<span>{{ x.speakers }}</span>{% endif %}{% if x.is_demo %}<span class="is-demo">Demo</span>{% endif %}</div>
-            <h3>{{ x.title }}</h3>
-            {% if x.description %}<p>{{ x.description }}</p>{% endif %}
-          </div>
-        </article>
-        {% else %}
-        <p class="shift-empty">Open time. The program for this shift is still taking shape.</p>
-        {% endfor %}
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  {% endfor %}
 </section>
 
 <figure class="community-band">
